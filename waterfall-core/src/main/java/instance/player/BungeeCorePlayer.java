@@ -1,6 +1,6 @@
 package instance.player;
 
-import us.smartmc.core.pluginsapi.data.player.OfflineCorePlayer;
+import me.imsergioh.pluginsapi.data.player.OfflineCorePlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.UUID;
