@@ -18,6 +18,12 @@ public class ConfigurableMenu extends CoreMenu {
         loadItemsFromSpecificPath(player, "items");
     }
 
+    public ConfigurableMenu(Player player, int size, SpigotYmlConfig config) {
+        super(player, size, getTitle(config));
+        this.config = config;
+        loadItemsFromSpecificPath(player, "items");
+    }
+
     protected void loadItemsFromSpecificPath(Player player, String path) {
         ConfigurationSection section = config.getSection(path);
         if (section == null) return;
