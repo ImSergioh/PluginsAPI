@@ -33,4 +33,8 @@ public abstract class ManagerRegistry<K, V> implements IManagerRegistry<V>, Plug
         return registry.values();
     }
 
+    public boolean isRegistered(K key) {
+        return registry.containsKey(key);
+    }
+
 }
