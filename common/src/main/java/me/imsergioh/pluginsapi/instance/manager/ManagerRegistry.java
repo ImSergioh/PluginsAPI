@@ -37,4 +37,8 @@ public abstract class ManagerRegistry<K, V> implements IManagerRegistry<V>, Plug
         return registry.containsKey(key);
     }
 
+    public V get(K key){
+        return registry.get(key);
+    }
+
 }
