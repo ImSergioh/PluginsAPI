@@ -6,6 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -37,8 +38,7 @@ public class ItemActionListeners implements Listener {
         ItemStack item = player.getItemInHand();
         // Execute actions with given properties
         CoreMenu coreMenu = CorePlayer.get(player).getCurrentMenuSet();
-        if (coreMenu == null) return;
-        if (item == null) return;
+        if (coreMenu == null || item == null || event.getAction().equals(Action.PHYSICAL)) return;
         action(player.getInventory().getHeldItemSlot(), item, player, event);
     }
 

@@ -1,6 +1,8 @@
 package me.imsergioh.pluginsapi.instance.manager;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 public abstract class ManagerRegistry<K, V> implements IManagerRegistry<V>, PluginManager {
 
@@ -21,6 +23,14 @@ public abstract class ManagerRegistry<K, V> implements IManagerRegistry<V>, Plug
     public void unregister(K key) {
         if (!registry.containsKey(key)) return;
         onUnregister(registry.remove(key));
+    }
+
+    public Set<K> keySet() {
+        return registry.keySet();
+    }
+
+    public Collection<V> values() {
+        return registry.values();
     }
 
 }
