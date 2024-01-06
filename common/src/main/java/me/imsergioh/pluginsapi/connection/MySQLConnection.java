@@ -26,7 +26,6 @@ public class MySQLConnection {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("QUERY=" + query);
             throw new RuntimeException(e);
         }
     }

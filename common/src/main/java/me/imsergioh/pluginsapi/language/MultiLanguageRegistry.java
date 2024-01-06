@@ -19,7 +19,6 @@ public class MultiLanguageRegistry {
             holder.accept(languageHolder.register(name));
         });
         cache.put(name, this.getClass().getName());
-        System.out.println("Cache put by class name " + this.getClass().getName());
     }
 
     public String get(Language language, String path, Object... args) {
