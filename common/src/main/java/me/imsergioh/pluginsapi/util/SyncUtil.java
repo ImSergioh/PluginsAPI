@@ -1,27 +1,24 @@
 package me.imsergioh.pluginsapi.util;
 
+import java.util.concurrent.*;
+
 public class SyncUtil {
 
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor(r -> new Thread(r, "SyncUtil"));
+    private static final ScheduledExecutorService scheduledFuture = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "SyncUtil"));
+
+
     public static void sync(Runnable runnable) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(25);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            runnable.run();
-        }).start();
+        runnable.run();
     }
 
-    public static void later(Runnable runnable, long millis) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(millis);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            runnable.run();
-        }).start();
+    public static void async(Runnable runnable) {
+        executorService.submit(runnable);
+    }
+
+    public static ScheduledFuture<?> later(Runnable runnable, long millis) {
+        return scheduledFuture.schedule(runnable, millis, TimeUnit.MILLISECONDS);
+
     }
 
 }

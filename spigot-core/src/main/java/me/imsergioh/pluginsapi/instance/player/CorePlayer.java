@@ -103,7 +103,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         PlayerLanguages.register(uuid, language);
         sendLanguageMessage("general", "lang_change");
         if (player != null)
-            SyncUtil.sync(() -> {
+            SyncUtil.async(() -> {
                 Bukkit.getPluginManager()
                         .callEvent(new PlayerLanguageChangedEvent(this, previousLang, language));
             });

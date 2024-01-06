@@ -19,9 +19,11 @@ public class CorePlayerData {
     public CorePlayerData(CorePlayer corePlayer) {
         this.corePlayer = corePlayer;
         document = new Document("_id", corePlayer.getUUID().toString());
-        loadData();
-        registerData("firstLogin", System.currentTimeMillis());
-        document.put("lastLogin", System.currentTimeMillis());
+        SyncUtil.later(() -> {
+            loadData();
+            registerData("firstLogin", System.currentTimeMillis());
+            document.put("lastLogin", System.currentTimeMillis());
+        }, 75);
     }
 
     public void registerData(String path, Object value) {
@@ -59,7 +61,7 @@ public class CorePlayerData {
 
         registerData("lang", PlayerLanguages.get(corePlayer.getUUID()).name());
 
-        SyncUtil.sync(() -> {
+        SyncUtil.async(() -> {
             Bukkit.getPluginManager().callEvent(new PlayerDataLoadedEvent(corePlayer, this));
         });
     }

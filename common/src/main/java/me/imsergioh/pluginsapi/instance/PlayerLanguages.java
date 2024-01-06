@@ -14,11 +14,12 @@ public class PlayerLanguages {
     }
 
     public static void register(UUID id, Language language) {
+        System.out.println("PlayerLanguages registering " + id + " to " + language.name());
         languages.put(id, language);
     }
 
     public static void unregister(UUID id) {
+        System.out.println("PlayerLanguages removing " + id);
         languages.remove(id);
     }
-
 }
