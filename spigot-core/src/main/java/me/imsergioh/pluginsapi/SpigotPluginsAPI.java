@@ -1,6 +1,7 @@
 package me.imsergioh.pluginsapi;
 
 import lombok.Getter;
+import me.imsergioh.pluginsapi.instance.player.CorePlayer;
 import me.imsergioh.pluginsapi.manager.ItemActionsManager;
 import me.imsergioh.pluginsapi.command.LanguageCommand;
 import me.imsergioh.pluginsapi.command.RestartCommand;
@@ -11,14 +12,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class SpigotPluginsAPI {
 
     @Getter
     private static JavaPlugin plugin;
+
+    private static BukkitTask bukkitTask;
 
     public static void setup(JavaPlugin pl) {
         plugin = pl;
@@ -35,6 +42,17 @@ public class SpigotPluginsAPI {
         } else {
             System.out.println("Command 'language' not found! (Not registered)");
         }
+    }
+
+    public static void startTickTask() {
+        bukkitTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (CorePlayer corePlayer : new ArrayList<>(CorePlayer.players.values())) {
+                    corePlayer.tickTask();
+                }
+            }
+        }.runTaskTimerAsynchronously(plugin, 0, 1);
     }
 
     public static void registerCommands(BukkitCommand... commands) {

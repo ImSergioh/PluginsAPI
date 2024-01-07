@@ -1,6 +1,7 @@
 package me.imsergioh.pluginsapi.instance.player;
 
 import me.imsergioh.pluginsapi.data.player.OfflineCorePlayer;
+import me.imsergioh.pluginsapi.event.PlayerTickEvent;
 import me.imsergioh.pluginsapi.handler.LanguagesHandler;
 import me.imsergioh.pluginsapi.instance.PlayerLanguages;
 import me.imsergioh.pluginsapi.language.Language;
@@ -11,12 +12,15 @@ import me.imsergioh.pluginsapi.util.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import me.imsergioh.pluginsapi.util.SyncUtil;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CorePlayer extends OfflineCorePlayer<Player> {
 
-    private static final HashMap<UUID, CorePlayer> players = new HashMap<>();
+
+    public static final ConcurrentHashMap<UUID, CorePlayer> players = new ConcurrentHashMap<>();
 
     protected final UUID uuid;
     protected final Player player;
@@ -34,6 +38,10 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         this.playerData = new CorePlayerData(this);
         players.put(uuid, this);
         load();
+    }
+
+    public void tickTask() {
+        Bukkit.getPluginManager().callEvent(new PlayerTickEvent(this));
     }
 
     public void clearInventory() {
