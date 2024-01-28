@@ -15,7 +15,7 @@ public class MessageAction implements ItemActionExecutor {
         for (String word : args) {
             messageBuilder.append(word).append(" ");
         }
-        messageBuilder.append(messageBuilder.length()-1);
+        messageBuilder.deleteCharAt(messageBuilder.length() - 1);
         player.sendMessage(ChatUtil.parse(player, messageBuilder.toString()));
     }
 }
