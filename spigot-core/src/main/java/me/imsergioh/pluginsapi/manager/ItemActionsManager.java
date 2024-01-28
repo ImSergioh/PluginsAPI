@@ -17,6 +17,7 @@ public class ItemActionsManager {
         registerCommand("openInv", new OpenInventoryAction());
         registerCommand("closeInv", new CloseInventoryAction());
         registerCommand("openPrevious", new OpenPreviousAction());
+        registerCommand("reloadLanguageConfig", new ReloadLanguageConfigAction());
         registerCommand("cmd", new CommandAction());
     }
 

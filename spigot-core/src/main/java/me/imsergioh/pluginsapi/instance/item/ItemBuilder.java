@@ -75,8 +75,8 @@ public class ItemBuilder {
             meta.setDisplayName(ChatUtil.parse(name, nameArgs));
 
         if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>(lore);
-            parsedLore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
+            List<String> parsedLore = new ArrayList<>();
+            lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
             for (String line : new ArrayList<>(parsedLore)) {
                 parsedLore.addAll(Arrays.asList(line.split("\n")));
             }
