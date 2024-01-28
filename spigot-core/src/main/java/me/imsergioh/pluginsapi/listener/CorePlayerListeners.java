@@ -21,16 +21,6 @@ public class CorePlayerListeners implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        //CorePlayer.register(event.getPlayer().getUniqueId());
-    }
-
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        //CorePlayer.remove(event.getPlayer().getUniqueId());
-    }
-
-    @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
         Player player = (Player) event.getPlayer();

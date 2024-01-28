@@ -20,31 +20,26 @@ public class ItemBuilder {
     private final ItemStack item;
     private ItemMeta meta;
 
+    private String name;
+    private Object[] nameArgs;
+
+    private List<String> lore = new ArrayList<>();
+    private Object[] loreArgs;
+
     protected ItemBuilder(Material material) {
         item = new ItemStack(material, 1);
         meta = item.getItemMeta();
     }
 
     public ItemBuilder name(String name, Object... args) {
-        meta.setDisplayName(ChatUtil.parse(name, args));
-        updateMeta();
+        this.name = name;
+        this.nameArgs = args;
         return this;
     }
 
     public ItemBuilder lore(List<String> lore, Object... args) {
-        List<String> list = new ArrayList<>();
-        lore.replaceAll(l -> ChatUtil.parse(l, args));
-        for (String line : lore) {
-            list.addAll(Arrays.asList(line.split("\n")));
-        }
-        meta.setLore(list);
-        updateMeta();
-        return this;
-    }
-
-    public ItemBuilder parseLore(Object... args) {
-        meta.getLore().replaceAll(l -> ChatUtil.parse(l, args));
-        updateMeta();
+        this.lore = lore;
+        this.loreArgs = args;
         return this;
     }
 
@@ -71,34 +66,40 @@ public class ItemBuilder {
             e.printStackTrace();
         }
         meta = skullMeta;
-        updateMeta();
+        item.setItemMeta(meta);
         return this;
     }
 
     public ItemStack get() {
-        return get((Player) null);
+        if (name != null)
+            meta.setDisplayName(ChatUtil.parse(name, nameArgs));
+
+        if (!lore.isEmpty()) {
+            List<String> parsedLore = new ArrayList<>(lore);
+            parsedLore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
+            meta.setLore(parsedLore);
+        }
+
+        item.setItemMeta(meta);
+        return item;
     }
 
     public ItemStack get(Player player) {
-        if (player != null && item.getItemMeta().getDisplayName() != null)
-            name(ChatUtil.parse(player, item.getItemMeta().getDisplayName()));
+        if (name != null)
+            meta.setDisplayName(ChatUtil.parse(player, name, nameArgs));
 
-        if (player != null && item.getItemMeta().getLore() != null) {
-            List<String> lore = item.getItemMeta().getLore();
-            lore.replaceAll(l -> ChatUtil.parse(player, l));
-            lore(lore);
+        if (!lore.isEmpty()) {
+            List<String> parsedLore = new ArrayList<>(lore);
+            parsedLore.replaceAll(line -> ChatUtil.parse(player, line, loreArgs));
+            meta.setLore(parsedLore);
         }
 
-        String id = getID(item);
+        item.setItemMeta(meta);
         return item;
     }
 
     public ItemMeta meta() {
         return meta;
-    }
-
-    private void updateMeta() {
-        item.setItemMeta(meta);
     }
 
     public static ItemBuilder of(Material material) {

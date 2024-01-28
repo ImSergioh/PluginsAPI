@@ -1,5 +1,7 @@
 package me.imsergioh.pluginsapi.instance.player;
 
+import lombok.Getter;
+import lombok.Setter;
 import me.imsergioh.pluginsapi.data.player.OfflineCorePlayer;
 import me.imsergioh.pluginsapi.event.PlayerTickEvent;
 import me.imsergioh.pluginsapi.handler.LanguagesHandler;
@@ -12,29 +14,32 @@ import me.imsergioh.pluginsapi.util.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import me.imsergioh.pluginsapi.util.SyncUtil;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CorePlayer extends OfflineCorePlayer<Player> {
 
-
-    public static final ConcurrentHashMap<UUID, CorePlayer> players = new ConcurrentHashMap<>();
+    protected static final Map<UUID, CorePlayer> players = new ConcurrentHashMap<>();
 
     protected final UUID uuid;
     protected final Player player;
 
+    @Getter
     protected final CorePlayerData playerData;
 
+    @Getter
+    @Setter
     private CoreMenu currentMenuOpen;
     private CoreMenu previousOpenMenu;
+    @Getter
+    @Setter
     private CoreMenu currentMenuSet;
 
-    public CorePlayer(UUID uuid) {
-        super(uuid);
-        this.uuid = uuid;
-        this.player = get();
+    public CorePlayer(Player player) {
+        super(player.getUniqueId());
+        this.uuid = player.getUniqueId();
+        this.player = player;
         this.playerData = new CorePlayerData(this);
         players.put(uuid, this);
         load();
@@ -62,16 +67,11 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         }
     }
 
-
     @Override
     public void unload() {
         PlayerLanguages.unregister(uuid);
         playerData.save();
         super.unload();
-    }
-
-    public CorePlayerData getPlayerData() {
-        return playerData;
     }
 
     public UUID getUUID() {
@@ -80,26 +80,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
 
     @Override
     public Player get() {
-        if (player != null) {
-            return player;
-        }
-        return Bukkit.getPlayer(uuid);
-    }
-
-    public void setCurrentMenuOpen(CoreMenu currentMenuOpen) {
-        this.currentMenuOpen = currentMenuOpen;
-    }
-
-    public void setCurrentMenuSet(CoreMenu currentMenuSet) {
-        this.currentMenuSet = currentMenuSet;
-    }
-
-    public CoreMenu getCurrentMenuOpen() {
-        return currentMenuOpen;
-    }
-
-    public CoreMenu getCurrentMenuSet() {
-        return currentMenuSet;
+        return player;
     }
 
     public void setLanguage(Language language) {
@@ -143,4 +124,9 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     public static CorePlayer get(Player player) {
         return get(player.getUniqueId());
     }
+
+    public static Collection<CorePlayer> getCorePlayers() {
+        return players.values();
+    }
+
 }

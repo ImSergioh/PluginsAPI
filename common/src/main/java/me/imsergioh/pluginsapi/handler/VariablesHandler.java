@@ -10,6 +10,7 @@ public class VariablesHandler {
     private static final Set<IVariableListener> listeners = new HashSet<>();
 
     public static String parse(String message) {
+        if (message == null) return null;
         for (IVariableListener listener : listeners) {
             message = listener.parse(message);
         }
@@ -17,6 +18,7 @@ public class VariablesHandler {
     }
 
     public static <Player> String parse(Player player, String message) {
+        if (message == null) return null;
         for (IVariableListener<Player> listener : listeners) {
             message = listener.parse(player, message);
         }

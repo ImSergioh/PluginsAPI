@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -24,8 +23,6 @@ public class SpigotPluginsAPI {
 
     @Getter
     private static JavaPlugin plugin;
-
-    private static BukkitTask bukkitTask;
 
     public static void setup(JavaPlugin pl) {
         plugin = pl;
@@ -45,10 +42,10 @@ public class SpigotPluginsAPI {
     }
 
     public static void startTickTask() {
-        bukkitTask = new BukkitRunnable() {
+        BukkitTask bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
-                for (CorePlayer corePlayer : new ArrayList<>(CorePlayer.players.values())) {
+                for (CorePlayer corePlayer : new ArrayList<>(CorePlayer.getCorePlayers())) {
                     corePlayer.tickTask();
                 }
             }

@@ -24,7 +24,12 @@ public abstract class CoreMenu implements ICoreMenu {
     protected CoreMenu(Player player, int size, String title) {
         this.player = player;
         this.size = size;
-        this.inventory = Bukkit.createInventory(null, size, ChatUtil.parse(player, title));
+        if (title == null) {
+            this.inventory = Bukkit.createInventory(null, size);
+        } else {
+            this.inventory = Bukkit.createInventory(null, size, ChatUtil.parse(player, title));
+        }
+
         load();
     }
 
