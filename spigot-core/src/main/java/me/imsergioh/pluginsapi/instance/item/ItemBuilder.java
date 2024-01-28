@@ -77,6 +77,9 @@ public class ItemBuilder {
         if (!lore.isEmpty()) {
             List<String> parsedLore = new ArrayList<>(lore);
             parsedLore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
+            for (String line : new ArrayList<>(parsedLore)) {
+                parsedLore.addAll(Arrays.asList(line.split("\n")));
+            }
             meta.setLore(parsedLore);
         }
 
@@ -89,8 +92,11 @@ public class ItemBuilder {
             meta.setDisplayName(ChatUtil.parse(player, name, nameArgs));
 
         if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>(lore);
-            parsedLore.replaceAll(line -> ChatUtil.parse(player, line, loreArgs));
+            List<String> parsedLore = new ArrayList<>();
+            lore.replaceAll(line -> ChatUtil.parse(player, line, loreArgs));
+            for (String line : lore) {
+                parsedLore.addAll(Arrays.asList(line.split("\n")));
+            }
             meta.setLore(parsedLore);
         }
 
