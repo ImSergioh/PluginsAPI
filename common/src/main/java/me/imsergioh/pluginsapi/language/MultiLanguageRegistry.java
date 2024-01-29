@@ -3,16 +3,20 @@ package me.imsergioh.pluginsapi.language;
 import lombok.Getter;
 import me.imsergioh.pluginsapi.handler.LanguagesHandler;
 import me.imsergioh.pluginsapi.util.ChatUtil;
+import me.imsergioh.pluginsapi.util.JavaUtil;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
 @Getter
 public class MultiLanguageRegistry {
 
-    private static final HashMap<String, Class<? extends MultiLanguageRegistry>> cache = new HashMap<>();
+    @Getter
+    private static final Set<String> names = new HashSet<>();
 
+    @Getter
     private final String name;
 
     public MultiLanguageRegistry(String name, Consumer<LanguageMessagesHolder> holder) {
@@ -20,7 +24,7 @@ public class MultiLanguageRegistry {
         LanguagesHandler.forEach(languageHolder -> {
             holder.accept(languageHolder.register(name));
         });
-        cache.put(name, getClass());
+        names.add(name);
     }
 
     public String get(Language language, String path, Object... args) {
@@ -31,20 +35,14 @@ public class MultiLanguageRegistry {
         return ChatUtil.parse(player, LanguagesHandler.get(language).get(name).getString(path), args);
     }
 
-    public static Set<String> getNames() {
-        return cache.keySet();
-    }
-
     public static void reload(String name) {
-        Class<? extends MultiLanguageRegistry> c = null;
         try {
-            Class<? extends MultiLanguageRegistry> className = cache.get(name);
-            if (className == null) return;
-            className.newInstance();
+            Class<? extends MultiLanguageRegistry> clazz = (Class<? extends MultiLanguageRegistry>) JavaUtil.findClass(name);
+            if (clazz == null) return;
+            clazz.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
 }

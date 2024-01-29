@@ -1,29 +1,27 @@
 package me.imsergioh.pluginsapi.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URLClassLoader;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class JavaUtil {
 
-    public static List<ClassLoader> getClassLoaders() {
-        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-        List<ClassLoader> classLoaders = new ArrayList<>();
+    private static final Set<ClassLoader> classLoaders = new HashSet<>();
 
-        while (classLoader != null) {
-            classLoaders.add(classLoader);
-            classLoader = classLoader.getParent();
-        }
-
-        // Agrega el ClassLoader del contexto actual (Thread context ClassLoader).
-        classLoaders.add(Thread.currentThread().getContextClassLoader());
-
-        // Ahora, classLoaders contiene una lista de todos los ClassLoaders en la jerarquía.
-
-        for (ClassLoader cl : classLoaders) {
-            System.out.println("ClassLoader: " + cl.toString());
-        }
-        return classLoaders;
+    public static void registerClassLoader(ClassLoader loader) {
+        classLoaders.add(loader);
     }
 
+    public static Class<?> findClass(String name) {
+        for (ClassLoader loader : classLoaders) {
+            try {
+                return loader.loadClass(name);
+            } catch (ClassNotFoundException ignore) {}
+        }
+        return null;
+    }
+
+    public static Collection<ClassLoader> getClassLoaders() {
+        return classLoaders;
+    }
 }

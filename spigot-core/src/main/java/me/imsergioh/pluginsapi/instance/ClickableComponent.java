@@ -1,11 +1,13 @@
 package me.imsergioh.pluginsapi.instance;
 
+import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
 import me.imsergioh.pluginsapi.util.ChatUtil;
 
+@Getter
 public class ClickableComponent {
 
     private final ComponentBuilder builder = new ComponentBuilder("");
@@ -37,9 +39,5 @@ public class ClickableComponent {
 
     public void send(Player player) {
         player.spigot().sendMessage(builder.create());
-    }
-
-    public BaseComponent getBuilder() {
-        return builder.create()[0];
     }
 }
