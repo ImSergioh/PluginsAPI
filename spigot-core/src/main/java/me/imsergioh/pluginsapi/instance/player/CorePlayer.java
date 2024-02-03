@@ -31,6 +31,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     @Getter
     @Setter
     private CoreMenu currentMenuOpen;
+    @Getter
     private CoreMenu previousOpenMenu;
     @Getter
     @Setter
