@@ -3,6 +3,7 @@ package me.imsergioh.pluginsapi.handler;
 import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.language.LanguageHolder;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
@@ -21,6 +22,10 @@ public class LanguagesHandler {
             if (holder == null) continue;
             languageHolder.accept(holder);
         }
+    }
+
+    public static Collection<LanguageHolder> getHolders() {
+        return holders.values();
     }
 
     public static LanguageHolder get(Language language) {
