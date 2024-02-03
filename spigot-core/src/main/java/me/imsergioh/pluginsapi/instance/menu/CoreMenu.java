@@ -16,6 +16,7 @@ import java.util.Arrays;
 public abstract class CoreMenu implements ICoreMenu {
 
     protected final Player player;
+    protected final CorePlayer corePlayer;
     protected final int size;
     protected final Inventory inventory;
 
@@ -23,6 +24,7 @@ public abstract class CoreMenu implements ICoreMenu {
 
     protected CoreMenu(Player player, int size, String title) {
         this.player = player;
+        this.corePlayer = CorePlayer.get(player);
         this.size = size;
         if (title == null) {
             this.inventory = Bukkit.createInventory(null, size);
