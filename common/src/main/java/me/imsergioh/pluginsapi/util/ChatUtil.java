@@ -14,11 +14,13 @@ public class ChatUtil {
     }
 
     public static <Player> String parse(Player player, String message, Object... args) {
-        return parse(player, MessageFormat.format(message, args));
+        message = parse(player, message);
+        return MessageFormat.format(message, args);
     }
 
     public static String parse(String message, Object... args) {
-        return parse(MessageFormat.format(message, args));
+        message = parse(message);
+        return MessageFormat.format(message, args);
     }
 
     public static String parse(String message) {
