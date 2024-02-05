@@ -6,6 +6,7 @@ import me.imsergioh.pluginsapi.listener.ItemActionListeners;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -67,6 +68,13 @@ public class ItemBuilder {
         }
         meta = skullMeta;
         item.setItemMeta(meta);
+        return this;
+    }
+
+    public ItemBuilder hideFlags() {
+        for (ItemFlag flag : ItemFlag.values()) {
+            meta.addItemFlags(flag);
+        }
         return this;
     }
 
