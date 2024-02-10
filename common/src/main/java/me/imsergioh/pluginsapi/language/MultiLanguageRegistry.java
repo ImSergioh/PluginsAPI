@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 @Getter
-public class MultiLanguageRegistry {
+public abstract class MultiLanguageRegistry implements IMultiLanguageRegistry {
 
     @Getter
     private static final Set<String> names = new HashSet<>();
@@ -19,12 +19,14 @@ public class MultiLanguageRegistry {
     @Getter
     private final String name;
 
-    public MultiLanguageRegistry(String name, Consumer<LanguageMessagesHolder> holder) {
-        this.name = name;
-        LanguagesHandler.forEach(languageHolder -> {
-            holder.accept(languageHolder.register(name));
-        });
+    public MultiLanguageRegistry() {
+        System.out.println("CLASS=" + getClass().getName());
+        LangMessagesInfo info = getClass().getDeclaredAnnotation(LangMessagesInfo.class);
+        this.name = info.name();
         names.add(name);
+        LanguagesHandler.forEach(languageHolder -> {
+            load(languageHolder.get(name));
+        });
     }
 
     public String get(Language language, String path, Object... args) {
@@ -44,5 +46,4 @@ public class MultiLanguageRegistry {
             throw new RuntimeException(e);
         }
     }
-
 }

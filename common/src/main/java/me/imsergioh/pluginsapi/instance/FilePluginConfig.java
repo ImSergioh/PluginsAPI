@@ -9,8 +9,6 @@ import org.bson.Document;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 @Getter
 public class FilePluginConfig extends Document implements IPluginConfig {
@@ -94,7 +92,7 @@ public class FilePluginConfig extends Document implements IPluginConfig {
     }
 
     @Override
-    public IPluginConfig registerDefault(String path, Object value) {
+    public FilePluginConfig registerDefault(String path, Object value) {
         if (containsKey(path)) return this;
         this.put(path, value);
         return this;

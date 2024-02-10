@@ -26,7 +26,6 @@ public class SpigotPluginsAPI {
 
     public static void setup(JavaPlugin pl) {
         plugin = pl;
-        LanguageMessages.setup();
         ItemBuilder.setup(plugin);
         ItemActionsManager.registerDefaults();
 

@@ -1,12 +1,16 @@
 package me.imsergioh.pluginsapi.language;
 
+import lombok.Getter;
+
 import java.io.File;
 import java.util.HashMap;
 
 public class LanguageHolder {
 
     private static final String FOLDER_PATH = "/home/lang";
+    @Getter
     private final File dir;
+    @Getter
     private final Language language;
 
     private final HashMap<String, LanguageMessagesHolder> messagesHolders = new HashMap<>();
@@ -26,13 +30,5 @@ public class LanguageHolder {
     public LanguageMessagesHolder get(String name) {
         if (!messagesHolders.containsKey(name)) return register(name);
         return messagesHolders.get(name);
-    }
-
-    public File getDir() {
-        return dir;
-    }
-
-    public Language getLanguage() {
-        return language;
     }
 }
