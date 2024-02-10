@@ -1,7 +1,9 @@
 package me.imsergioh.pluginsapi.language;
 
+import lombok.Getter;
 import me.imsergioh.pluginsapi.instance.FilePluginConfig;
 
+@Getter
 public class LanguageMessagesHolder extends FilePluginConfig {
 
     private final String name;
@@ -12,7 +14,4 @@ public class LanguageMessagesHolder extends FilePluginConfig {
         load();
     }
 
-    public String getName() {
-        return name;
-    }
 }
