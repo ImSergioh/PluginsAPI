@@ -26,7 +26,12 @@ public class ChatUtil {
     public static String parse(String message) {
         if (message != null) {
             message = VariablesHandler.parse(message);
+            return color(message);
         }
+        return null;
+    }
+
+    public static String color(String message) {
         return message.replace("&" ,"§");
     }
 
