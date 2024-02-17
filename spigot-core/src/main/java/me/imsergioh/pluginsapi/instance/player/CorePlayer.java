@@ -2,6 +2,7 @@ package me.imsergioh.pluginsapi.instance.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.imsergioh.pluginsapi.SpigotPluginsAPI;
 import me.imsergioh.pluginsapi.data.player.OfflineCorePlayer;
 import me.imsergioh.pluginsapi.event.PlayerTickEvent;
 import me.imsergioh.pluginsapi.handler.LanguagesHandler;
@@ -19,6 +20,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CorePlayer extends OfflineCorePlayer<Player> {
+
+    @Setter
+    @Getter
+    private static boolean enabledTickEvent = false;
 
     protected static final Map<UUID, CorePlayer> players = new ConcurrentHashMap<>();
 
@@ -44,10 +49,11 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         this.playerData = new CorePlayerData(this);
         players.put(uuid, this);
         load();
+        checkTickTask();
     }
 
-    public void tickTask() {
-        Bukkit.getPluginManager().callEvent(new PlayerTickEvent(this));
+    public boolean canTickTask() {
+        return true;
     }
 
     public void clearInventory() {
@@ -116,6 +122,16 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
 
     public Language getLanguage() {
         return PlayerLanguages.get(player.getUniqueId());
+    }
+
+    public void tickTask() {
+        if (!canTickTask()) return;
+        Bukkit.getPluginManager().callEvent(new PlayerTickEvent(this));
+    }
+
+    private static void checkTickTask() {
+        if (!enabledTickEvent) return;
+        SpigotPluginsAPI.startTickTask();
     }
 
     public static CorePlayer get(UUID uuid) {

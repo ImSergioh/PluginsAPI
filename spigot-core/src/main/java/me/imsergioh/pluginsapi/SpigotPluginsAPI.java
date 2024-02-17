@@ -18,11 +18,13 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class SpigotPluginsAPI {
 
     @Getter
     private static JavaPlugin plugin;
+    private static BukkitTask bukkitTask;
 
     public static void setup(JavaPlugin pl) {
         plugin = pl;
@@ -41,10 +43,17 @@ public class SpigotPluginsAPI {
     }
 
     public static void startTickTask() {
-        BukkitTask bukkitTask = new BukkitRunnable() {
+        if (bukkitTask != null) return;
+        bukkitTask = new BukkitRunnable() {
             @Override
             public void run() {
-                for (CorePlayer corePlayer : new ArrayList<>(CorePlayer.getCorePlayers())) {
+                Collection<CorePlayer> players = CorePlayer.getCorePlayers();
+                if (!CorePlayer.isEnabledTickEvent() || players.isEmpty()) {
+                    bukkitTask = null;
+                    cancel();
+                    return;
+                }
+                for (CorePlayer corePlayer : CorePlayer.getCorePlayers()) {
                     corePlayer.tickTask();
                 }
             }
