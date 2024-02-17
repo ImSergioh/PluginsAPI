@@ -134,6 +134,10 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         SpigotPluginsAPI.startTickTask();
     }
 
+    public static void remove(UUID uuid) {
+        players.remove(uuid);
+    }
+
     public static CorePlayer get(UUID uuid) {
         return players.get(uuid);
     }
