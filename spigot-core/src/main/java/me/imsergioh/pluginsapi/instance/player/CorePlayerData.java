@@ -10,6 +10,8 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import me.imsergioh.pluginsapi.util.SyncUtil;
 
+import java.util.UUID;
+
 public class CorePlayerData {
 
     private final CorePlayer corePlayer;
@@ -19,11 +21,15 @@ public class CorePlayerData {
     public CorePlayerData(CorePlayer corePlayer) {
         this.corePlayer = corePlayer;
         document = new Document("_id", corePlayer.getUUID().toString());
-        SyncUtil.later(() -> {
-            loadData();
-            registerData("firstLogin", System.currentTimeMillis());
-            document.put("lastLogin", System.currentTimeMillis());
-        }, 75);
+        loadData();
+        registerData("firstLogin", System.currentTimeMillis());
+        document.put("lastLogin", System.currentTimeMillis());
+    }
+
+    public CorePlayerData(UUID uuid) {
+        this.corePlayer = CorePlayer.get(uuid);
+        document = new Document("_id", uuid.toString());
+        loadData();
     }
 
     public void registerData(String path, Object value) {
