@@ -27,7 +27,9 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
 
     protected static final Map<UUID, CorePlayer> players = new ConcurrentHashMap<>();
 
+    @Getter
     protected final UUID uuid;
+    @Getter
     protected final Player bukkitPlayer;
     protected boolean isOnline;
 
