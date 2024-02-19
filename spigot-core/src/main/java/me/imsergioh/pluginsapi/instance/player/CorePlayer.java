@@ -28,7 +28,8 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     protected static final Map<UUID, CorePlayer> players = new ConcurrentHashMap<>();
 
     protected final UUID uuid;
-    protected final Player player;
+    protected final Player bukkitPlayer;
+    protected boolean isOnline;
 
     @Getter
     protected final CorePlayerData playerData;
@@ -42,13 +43,20 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     @Setter
     private CoreMenu currentMenuSet;
 
-    public CorePlayer(Player player) {
-        super(player.getUniqueId());
-        this.uuid = player.getUniqueId();
-        this.player = player;
+    public CorePlayer(UUID uuid) {
+        super(uuid);
+        this.uuid = uuid;
+        this.bukkitPlayer = Bukkit.getPlayer(uuid);
         this.playerData = new CorePlayerData(this);
         players.put(uuid, this);
         load();
+        setupIfPlayerIsOnline();
+    }
+
+    private void setupIfPlayerIsOnline() {
+        if (bukkitPlayer == null) return;
+        if (!bukkitPlayer.isOnline()) return;
+        isOnline = true;
         checkTickTask();
     }
 
@@ -57,7 +65,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     }
 
     public void clearInventory() {
-        player.getInventory().clear();
+        bukkitPlayer.getInventory().clear();
         currentMenuSet = null;
     }
 
@@ -70,7 +78,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
 
     public void openPreviousMenu() {
         if (previousOpenMenu != null) {
-            previousOpenMenu.open(player);
+            previousOpenMenu.open(bukkitPlayer);
         }
     }
 
@@ -87,7 +95,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
 
     @Override
     public Player get() {
-        return player;
+        return bukkitPlayer;
     }
 
     public void setLanguage(Language language) {
@@ -98,7 +106,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         playerData.setData("lang", language.name());
         PlayerLanguages.register(uuid, language);
         sendLanguageMessage("general", "lang_change");
-        if (player != null)
+        if (bukkitPlayer != null)
             SyncUtil.async(() -> {
                 Bukkit.getPluginManager()
                         .callEvent(new PlayerLanguageChangedEvent(this, previousLang, language));
@@ -106,8 +114,8 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     }
 
     public void sendLanguageMessage(String holderName, String key, Object... vars) {
-        if (player == null) return;
-        player.sendMessage(getLanguageMessage(holderName, key, vars));
+        if (bukkitPlayer == null) return;
+        bukkitPlayer.sendMessage(getLanguageMessage(holderName, key, vars));
     }
 
     public String getLanguageMessage(String holderName, String key, Object... vars) {
@@ -117,11 +125,11 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
                     .get(holderName).getString(key);
         } catch (Exception ignore) {
         }
-        return message == null ? "undefined" : ChatUtil.parse(player, message, vars);
+        return message == null ? "undefined" : ChatUtil.parse(bukkitPlayer, message, vars);
     }
 
     public Language getLanguage() {
-        return PlayerLanguages.get(player.getUniqueId());
+        return PlayerLanguages.get(bukkitPlayer.getUniqueId());
     }
 
     public void tickTask() {

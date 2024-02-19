@@ -1,6 +1,7 @@
 package me.imsergioh.pluginsapi.instance.player;
 
 import com.mongodb.client.MongoCollection;
+import lombok.Getter;
 import me.imsergioh.pluginsapi.connection.MongoDBConnection;
 import me.imsergioh.pluginsapi.instance.PlayerLanguages;
 import me.imsergioh.pluginsapi.language.Language;
@@ -12,6 +13,7 @@ import me.imsergioh.pluginsapi.util.SyncUtil;
 
 import java.util.UUID;
 
+@Getter
 public class CorePlayerData {
 
     private final CorePlayer corePlayer;
@@ -88,11 +90,4 @@ public class CorePlayerData {
         collection.insertOne(document);
     }
 
-    public Document getDocument() {
-        return document;
-    }
-
-    public CorePlayer getCorePlayer() {
-        return corePlayer;
-    }
 }
