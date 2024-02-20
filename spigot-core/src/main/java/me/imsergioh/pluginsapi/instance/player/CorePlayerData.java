@@ -3,13 +3,13 @@ package me.imsergioh.pluginsapi.instance.player;
 import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import me.imsergioh.pluginsapi.connection.MongoDBConnection;
-import me.imsergioh.pluginsapi.instance.PlayerLanguages;
-import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.event.FirstCorePlayerJoinEvent;
 import me.imsergioh.pluginsapi.event.PlayerDataLoadedEvent;
+import me.imsergioh.pluginsapi.instance.PlayerLanguages;
+import me.imsergioh.pluginsapi.language.Language;
+import me.imsergioh.pluginsapi.util.SyncUtil;
 import org.bson.Document;
 import org.bukkit.Bukkit;
-import me.imsergioh.pluginsapi.util.SyncUtil;
 
 import java.util.UUID;
 
@@ -51,12 +51,15 @@ public class CorePlayerData {
                 .getCollection("core_players").find(queryDocument).first();
         if (document != null) {
             this.document = document;
-        } else {
-            // Document not found: Calls first core player join event
+        } else if (corePlayer != null) {
+            // Document not found: Calls first core player join event (if connected)
             Bukkit.getPluginManager().callEvent(new FirstCorePlayerJoinEvent(corePlayer));
         }
 
-        // Register language
+        // Return if not connected
+        if (corePlayer == null) return;
+
+        // Register language & call event PlayerDataLoadedEvent
         String langString = this.document.getString("lang");
         Language language = null;
         try {
@@ -66,7 +69,6 @@ public class CorePlayerData {
             this.document.put("lang", language.name());
         }
         PlayerLanguages.register(corePlayer.getUUID(), language);
-
         registerData("lang", PlayerLanguages.get(corePlayer.getUUID()).name());
 
         SyncUtil.async(() -> {
