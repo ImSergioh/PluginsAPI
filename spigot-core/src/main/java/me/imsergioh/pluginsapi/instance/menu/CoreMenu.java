@@ -31,8 +31,6 @@ public abstract class CoreMenu implements ICoreMenu {
         } else {
             this.inventory = Bukkit.createInventory(null, size, ChatUtil.parse(player, title));
         }
-
-        load();
     }
 
     @Override
@@ -58,6 +56,7 @@ public abstract class CoreMenu implements ICoreMenu {
 
     @Override
     public void open(Player player) {
+        load();
         player.openInventory(inventory);
         CorePlayer.get(player).setCurrentMenuOpen(this);
         player.playSound(player.getLocation(), Sound.CLICK, 0.1F, 2.5F);
@@ -65,6 +64,7 @@ public abstract class CoreMenu implements ICoreMenu {
 
     @Override
     public void set(Player player) {
+        load();
         CorePlayer.get(player).setCurrentMenuSet(this);
         player.getInventory().setContents(inventory.getContents());
         player.updateInventory();
