@@ -12,16 +12,14 @@ public class ConfigurableMenu extends CoreMenu {
 
     protected final SpigotYmlConfig config;
 
-    public ConfigurableMenu(Player player, SpigotYmlConfig config) {
-        super(player, getSize(config), getTitle(config));
+    public ConfigurableMenu(Player player, SpigotYmlConfig config, int size, String title) {
+        super(player, size, title);
         this.config = config;
         loadItemsFromSpecificPath(player, "items");
     }
 
-    public ConfigurableMenu(Player player, int size, SpigotYmlConfig config) {
-        super(player, size, getTitle(config));
-        this.config = config;
-        loadItemsFromSpecificPath(player, "items");
+    public ConfigurableMenu(Player player, SpigotYmlConfig config) {
+        this(player, config, getSize(config), getTitle(config));
     }
 
     protected void loadItemsFromSpecificPath(Player player, String path) {
