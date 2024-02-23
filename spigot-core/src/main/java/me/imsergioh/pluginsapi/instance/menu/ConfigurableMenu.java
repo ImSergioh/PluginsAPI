@@ -22,6 +22,14 @@ public class ConfigurableMenu extends CoreMenu {
         this(player, config, getSize(config), getTitle(config));
     }
 
+    public ConfigurableMenu(Player player, SpigotYmlConfig config, String title) {
+        this(player, config, getSize(config), title);
+    }
+
+    public ConfigurableMenu(Player player, SpigotYmlConfig config, int size) {
+        this(player, config, size, getTitle(config));
+    }
+
     protected void loadItemsFromSpecificPath(Player player, String path) {
         ConfigurationSection section = config.getSection(path);
         if (section == null) return;
