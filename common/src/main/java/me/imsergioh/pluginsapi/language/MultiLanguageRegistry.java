@@ -7,6 +7,7 @@ import me.imsergioh.pluginsapi.util.JavaUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -14,16 +15,15 @@ import java.util.function.Consumer;
 public abstract class MultiLanguageRegistry implements IMultiLanguageRegistry {
 
     @Getter
-    private static final Set<String> names = new HashSet<>();
+    private static final Map<String, String> classesNames = new HashMap<>();
 
     @Getter
     private final String name;
 
     public MultiLanguageRegistry() {
-        System.out.println("CLASS=" + getClass().getName());
         LangMessagesInfo info = getClass().getDeclaredAnnotation(LangMessagesInfo.class);
         this.name = info.name();
-        names.add(name);
+        classesNames.put(name, getClass().getName());
         LanguagesHandler.forEach(languageHolder -> {
             load(languageHolder.get(name));
         });
@@ -39,7 +39,7 @@ public abstract class MultiLanguageRegistry implements IMultiLanguageRegistry {
 
     public static void reload(String name) {
         try {
-            Class<? extends MultiLanguageRegistry> clazz = (Class<? extends MultiLanguageRegistry>) JavaUtil.findClass(name);
+            Class<? extends MultiLanguageRegistry> clazz = (Class<? extends MultiLanguageRegistry>) JavaUtil.findClass(classesNames.get(name));
             if (clazz == null) return;
             clazz.newInstance();
         } catch (Exception e) {
