@@ -17,19 +17,17 @@ public class CorePlayerListeners implements Listener {
         CorePlayer.remove(event.getPlayer().getUniqueId());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void registerInventoryCloseInv(InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof Player)) return;
-        Player player = (Player) event.getPlayer();
+        if (!(event.getPlayer() instanceof Player player)) return;
         CoreMenu menu = CorePlayer.get(player).getCurrentMenuOpen();
         if (menu == null) return;
         CorePlayer.get(event.getPlayer().getUniqueId()).registerMenuHistory(menu);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onClose(InventoryCloseEvent event) {
-        if (!(event.getPlayer() instanceof Player)) return;
-        Player player = (Player) event.getPlayer();
+        if (!(event.getPlayer() instanceof Player player)) return;
         CorePlayer.get(player).setCurrentMenuOpen(null);
     }
 }
