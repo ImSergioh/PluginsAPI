@@ -5,7 +5,6 @@ import lombok.Setter;
 import me.imsergioh.pluginsapi.SpigotPluginsAPI;
 import me.imsergioh.pluginsapi.data.player.OfflineCorePlayer;
 import me.imsergioh.pluginsapi.event.PlayerTickEvent;
-import me.imsergioh.pluginsapi.event.PlayerUnloadEvent;
 import me.imsergioh.pluginsapi.handler.LanguagesHandler;
 import me.imsergioh.pluginsapi.instance.PlayerLanguages;
 import me.imsergioh.pluginsapi.language.Language;
@@ -87,7 +86,6 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
 
     @Override
     public void unload() {
-        Bukkit.getPluginManager().callEvent(new PlayerUnloadEvent(this));
         PlayerLanguages.unregister(uuid);
         playerData.save();
         super.unload();
@@ -147,7 +145,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     }
 
     public static void remove(UUID uuid) {
-        players.remove(uuid).unload();
+        players.remove(uuid);
     }
 
     public static CorePlayer get(UUID uuid) {
