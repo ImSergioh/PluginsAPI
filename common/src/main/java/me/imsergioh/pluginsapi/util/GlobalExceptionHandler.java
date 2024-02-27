@@ -17,6 +17,7 @@ public class GlobalExceptionHandler implements Thread.UncaughtExceptionHandler {
     public static void registerListener(ExceptionHandlerListener... listeners) {
         if (HANDLER == null) {
             HANDLER = new GlobalExceptionHandler();
+            Thread.setDefaultUncaughtExceptionHandler(HANDLER);
         }
         exceptionListeners.addAll(Arrays.asList(listeners));
         checkSetHandlerThread();
@@ -24,22 +25,18 @@ public class GlobalExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        handle(t, e);
-    }
-
-    private void handle(Thread thread, Throwable e) {
+        System.out.println("NEW ERROR! " + e.getMessage());
         for (ExceptionHandlerListener listener : exceptionListeners) {
+            System.out.println("Parsing ExceptionListener -> " + listener.getClass().getName());
             listener.onException(thread, e);
         }
     }
 
     private static void checkSetHandlerThread() {
-        if (exceptionListeners.isEmpty()) return;
         if (thread != null) return;
         thread = new Thread(() -> {
             while (true) {
                 Thread.getAllStackTraces().keySet().forEach(thread -> {
-                    if (thread.getUncaughtExceptionHandler() instanceof GlobalExceptionHandler) return;
                     thread.setUncaughtExceptionHandler(HANDLER);
                 });
                 try {
