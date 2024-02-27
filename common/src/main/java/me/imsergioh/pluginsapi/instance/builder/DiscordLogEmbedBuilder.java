@@ -59,7 +59,11 @@ public class DiscordLogEmbedBuilder {
     }
 
     public void send(Jedis jedis) {
-        jedis.publish("discord-logs:embed", document.toJson());
+        send("discord-logs:embed", jedis);
+    }
+
+    public void send(String channel, Jedis jedis) {
+        jedis.publish(channel, document.toJson());
     }
 
 }
