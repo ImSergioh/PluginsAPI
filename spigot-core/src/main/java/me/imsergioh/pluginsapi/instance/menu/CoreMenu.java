@@ -59,7 +59,7 @@ public abstract class CoreMenu implements ICoreMenu {
         load();
         player.openInventory(inventory);
         CorePlayer.get(player).setCurrentMenuOpen(this);
-        player.playSound(player.getLocation(), Sound.CLICK, 0.1F, 2.5F);
+        //player.playSound(player.getLocation(), Sound.CLICK, 0.1F, 2.5F);
     }
 
     @Override

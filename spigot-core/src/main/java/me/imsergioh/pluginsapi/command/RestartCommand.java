@@ -22,7 +22,7 @@ public class RestartCommand extends BukkitCommand {
         if (!sender.hasPermission("*")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1, 1);
+                //player.playSound(player.getLocation(), Sound.VILLAGER_NO, 1, 1);
                 return true;
             }
         }
