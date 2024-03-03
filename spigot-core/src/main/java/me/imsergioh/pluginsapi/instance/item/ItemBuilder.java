@@ -82,11 +82,11 @@ public class ItemBuilder {
 
     public ItemStack get(Language language) {
         if (name != null)
-            meta.setDisplayName(LanguageUtil.parse(language, ChatUtil.parse(name, nameArgs)));
+            meta.setDisplayName(ChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
 
         if (!lore.isEmpty()) {
             List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> LanguageUtil.parse(language, ChatUtil.parse(line, loreArgs)));
+            lore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(language, line), loreArgs));
             for (String line : lore) {
                 List<String> list = Arrays.asList(line.split("\n"));
                 list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
