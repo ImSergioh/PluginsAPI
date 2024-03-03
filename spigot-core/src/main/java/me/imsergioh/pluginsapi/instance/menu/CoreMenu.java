@@ -1,5 +1,6 @@
 package me.imsergioh.pluginsapi.instance.menu;
 
+import lombok.Getter;
 import me.imsergioh.pluginsapi.instance.player.CorePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,16 +16,19 @@ import java.util.Arrays;
 
 public abstract class CoreMenu implements ICoreMenu {
 
-    protected final Player player;
-    protected final CorePlayer corePlayer;
+    @Getter
+    protected final Player initPlayer;
+    @Getter
+    protected final CorePlayer initCorePlayer;
     protected final int size;
     protected final Inventory inventory;
 
+    @Getter
     protected final MenuItemActionManager actionManager = new MenuItemActionManager();
 
     protected CoreMenu(Player player, int size, String title) {
-        this.player = player;
-        this.corePlayer = CorePlayer.get(player);
+        this.initPlayer = player;
+        this.initCorePlayer = CorePlayer.get(player);
         this.size = size;
         if (title == null) {
             this.inventory = Bukkit.createInventory(null, size);
@@ -58,30 +62,26 @@ public abstract class CoreMenu implements ICoreMenu {
     public void open(Player player) {
         load();
         player.openInventory(inventory);
-        CorePlayer.get(player).setCurrentMenuOpen(this);
-        //player.playSound(player.getLocation(), Sound.CLICK, 0.1F, 2.5F);
+        CorePlayer corePlayer = CorePlayer.get(player);
+        corePlayer.setCurrentMenuOpen(this);
     }
 
     @Override
     public void set(Player player) {
         load();
-        CorePlayer.get(player).setCurrentMenuSet(this);
         player.getInventory().setContents(inventory.getContents());
         player.updateInventory();
+        CorePlayer corePlayer = CorePlayer.get(player);
+        corePlayer.setCurrentMenuSet(this);
     }
 
     public ItemStack getPreviousMenuItem(Player player) {
-        ItemStack item = ItemBuilder.of(Material.BOOK)
+        return ItemBuilder.of(Material.BOOK)
                 .name("&c<lang.language.menu_previous>").get(player);
-        return item;
     }
 
     public ItemStack getCloseMenuItem(Player player) {
         return ItemBuilder.of(Material.BARRIER)
                 .name("&c<lang.language.menu_close>").get(player);
-    }
-
-    public MenuItemActionManager getActionManager() {
-        return actionManager;
     }
 }
