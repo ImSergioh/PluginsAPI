@@ -85,12 +85,13 @@ public class ItemBuilder {
         if (!lore.isEmpty()) {
             List<String> parsedLore = new ArrayList<>();
             lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
-            for (String line : new ArrayList<>(parsedLore)) {
-                parsedLore.addAll(Arrays.asList(line.split("\n")));
+            for (String line : lore) {
+                List<String> list = Arrays.asList(line.split("\n"));
+                list.replaceAll(s -> s.startsWith("&") ? s : "&7" + s);
+                parsedLore.addAll(list);
             }
             meta.setLore(parsedLore);
         }
-
         item.setItemMeta(meta);
         return item;
     }
@@ -101,9 +102,11 @@ public class ItemBuilder {
 
         if (!lore.isEmpty()) {
             List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> ChatUtil.parse(player, line, loreArgs));
+            lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
             for (String line : lore) {
-                parsedLore.addAll(Arrays.asList(line.split("\n")));
+                List<String> list = Arrays.asList(line.split("\n"));
+                list.replaceAll(s -> s.startsWith("&") ? s : "&7" + s);
+                parsedLore.addAll(list);
             }
             meta.setLore(parsedLore);
         }
