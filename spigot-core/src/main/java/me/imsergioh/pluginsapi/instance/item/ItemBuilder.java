@@ -2,7 +2,9 @@ package me.imsergioh.pluginsapi.instance.item;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
+import me.imsergioh.pluginsapi.util.LanguageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -76,6 +78,24 @@ public class ItemBuilder {
             meta.addItemFlags(flag);
         }
         return this;
+    }
+
+    public ItemStack get(Language language) {
+        if (name != null)
+            meta.setDisplayName(LanguageUtil.parse(language, ChatUtil.parse(name, nameArgs)));
+
+        if (!lore.isEmpty()) {
+            List<String> parsedLore = new ArrayList<>();
+            lore.replaceAll(line -> LanguageUtil.parse(language, ChatUtil.parse(line, loreArgs)));
+            for (String line : lore) {
+                List<String> list = Arrays.asList(line.split("\n"));
+                list.replaceAll(s -> s.startsWith("&") ? s : "&7" + s);
+                parsedLore.addAll(list);
+            }
+            meta.setLore(parsedLore);
+        }
+        item.setItemMeta(meta);
+        return item;
     }
 
     public ItemStack get() {
