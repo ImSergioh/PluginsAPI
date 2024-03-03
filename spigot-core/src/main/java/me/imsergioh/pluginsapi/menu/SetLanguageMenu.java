@@ -21,10 +21,10 @@ public class SetLanguageMenu extends CoreMenu {
 
     @Override
     public void load() {
-        set(8, getCloseMenuItem(player), "closeInv");
-        set(21, getES_Item(player), "cmd lang ES");
-        set(23, getEN_Item(player), "cmd lang EN");
-        set(40, getPreviousMenuItem(player), "openPrevious");
+        set(8, getCloseMenuItem(initPlayer), "closeInv");
+        set(21, getES_Item(initPlayer), "cmd lang ES");
+        set(23, getEN_Item(initPlayer), "cmd lang EN");
+        set(40, getPreviousMenuItem(initPlayer), "openPrevious");
     }
 
     private ItemStack getLangItem(Player player, Language language, String skulltexture) {

@@ -18,8 +18,7 @@ public abstract class CoreMenu implements ICoreMenu {
 
     @Getter
     protected final Player initPlayer;
-    @Getter
-    protected final CorePlayer initCorePlayer;
+    protected CorePlayer initCorePlayer;
     protected final int size;
     protected final Inventory inventory;
 
@@ -28,12 +27,14 @@ public abstract class CoreMenu implements ICoreMenu {
 
     protected CoreMenu(Player player, int size, String title) {
         this.initPlayer = player;
-        this.initCorePlayer = CorePlayer.get(player);
+        if (initPlayer != null)
+            this.initCorePlayer = CorePlayer.get(player);
         this.size = size;
         if (title == null) {
             this.inventory = Bukkit.createInventory(null, size);
         } else {
-            this.inventory = Bukkit.createInventory(null, size, ChatUtil.parse(player, title));
+            String formattedTitle = player == null ? ChatUtil.parse(title) : ChatUtil.parse(player, title);
+            this.inventory = Bukkit.createInventory(null, size, formattedTitle);
         }
     }
 
