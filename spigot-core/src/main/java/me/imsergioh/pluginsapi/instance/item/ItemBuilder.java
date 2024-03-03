@@ -89,7 +89,7 @@ public class ItemBuilder {
             lore.replaceAll(line -> LanguageUtil.parse(language, ChatUtil.parse(line, loreArgs)));
             for (String line : lore) {
                 List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? s : "&7" + s);
+                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
                 parsedLore.addAll(list);
             }
             meta.setLore(parsedLore);
@@ -107,7 +107,7 @@ public class ItemBuilder {
             lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
             for (String line : lore) {
                 List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? s : "&7" + s);
+                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
                 parsedLore.addAll(list);
             }
             meta.setLore(parsedLore);
@@ -125,7 +125,7 @@ public class ItemBuilder {
             lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
             for (String line : lore) {
                 List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? s : "&7" + s);
+                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
                 parsedLore.addAll(list);
             }
             meta.setLore(parsedLore);
