@@ -4,7 +4,6 @@ import lombok.Getter;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class LanguageHolder {
 
@@ -35,12 +34,16 @@ public class LanguageHolder {
                     }
                 }
                 for (String name : toRemove) {
-                    messagesHolders.remove(name);
-                    System.out.println("Removed from cache LanguageMessagesHolder -> " + name);
+                    unregister(name);
                 }
 
             }
         }, LanguageMessagesHolder.CLEAR_MESSAGE_HOLDER_AFTER, LanguageMessagesHolder.CLEAR_MESSAGE_HOLDER_AFTER);
+    }
+
+    public void unregister(String name) {
+        messagesHolders.remove(name);
+        System.out.println("Removed from cache LanguageMessagesHolder -> " + name);
     }
 
     public LanguageMessagesHolder register(String name) {

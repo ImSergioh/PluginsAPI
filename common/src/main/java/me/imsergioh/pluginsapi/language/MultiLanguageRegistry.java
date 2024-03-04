@@ -24,8 +24,11 @@ public abstract class MultiLanguageRegistry implements IMultiLanguageRegistry {
         LangMessagesInfo info = getClass().getDeclaredAnnotation(LangMessagesInfo.class);
         this.name = info.name();
         classesNames.put(name, getClass().getName());
+        // Call load method when created registry and immediately unregister
+        // This will provide the registration of new messages and the unregister until is requested again
         LanguagesHandler.forEach(languageHolder -> {
             load(languageHolder.get(name));
+            languageHolder.unregister(name);
         });
     }
 
