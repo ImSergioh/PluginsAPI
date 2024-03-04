@@ -43,7 +43,6 @@ public class LanguageHolder {
 
     public void unregister(String name) {
         messagesHolders.remove(name);
-        System.out.println("Removed from cache LanguageMessagesHolder -> " + name);
     }
 
     public LanguageMessagesHolder register(String name) {
