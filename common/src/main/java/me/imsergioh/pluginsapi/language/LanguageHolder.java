@@ -35,6 +35,7 @@ public class LanguageHolder {
                 }
                 for (String name : toRemove) {
                     unregister(name);
+                    System.out.println("Removed from cache LanguageMessagesHolder -> " + name + " (Due to inactivity)");
                 }
 
             }
