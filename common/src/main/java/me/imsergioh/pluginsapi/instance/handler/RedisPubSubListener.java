@@ -1,7 +1,9 @@
 package me.imsergioh.pluginsapi.instance.handler;
 
+import lombok.Getter;
 import redis.clients.jedis.JedisPubSub;
 
+@Getter
 public abstract class RedisPubSubListener extends JedisPubSub implements IRedisPubSubListener {
 
     protected final String channel;
@@ -15,7 +17,4 @@ public abstract class RedisPubSubListener extends JedisPubSub implements IRedisP
         onMessage(message);
     }
 
-    public String getChannel() {
-        return channel;
-    }
 }

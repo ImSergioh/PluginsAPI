@@ -12,6 +12,7 @@
         <module>spigot-core</module>
         <module>waterfall-core</module>
         <module>common</module>
+        <module>velocity-core</module>
     </modules>
 
     <properties>

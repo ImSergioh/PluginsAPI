@@ -31,7 +31,6 @@ public class SpigotPluginsAPI {
         ItemBuilder.setup(plugin);
         ItemActionsManager.registerDefaults();
 
-        //registerCommands(new RestartCommand("crestart"));
         Bukkit.getPluginManager().registerEvents(new CorePlayerListeners(), pl);
 
         PluginCommand languageCommand = plugin.getCommand("language");
