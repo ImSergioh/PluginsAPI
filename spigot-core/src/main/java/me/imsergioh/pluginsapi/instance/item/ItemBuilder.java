@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
 import me.imsergioh.pluginsapi.util.LanguageUtil;
+import me.imsergioh.pluginsapi.util.SkullCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +17,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.imsergioh.pluginsapi.util.ChatUtil;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 public class ItemBuilder {
@@ -46,6 +51,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder lore(String... lores) {
+        this.lore = Arrays.asList(lores);
+        return this;
+    }
+
     public ItemBuilder amount(int amount) {
         item.setAmount(amount);
         return this;
@@ -56,20 +66,20 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder skullTexture(String texture) {
-        SkullMeta skullMeta = (SkullMeta) meta;
-        GameProfile profile = new GameProfile(UUID.randomUUID(), "");
-        profile.getProperties().put("textures", new Property("textures", texture));
-        Field profileField;
+    private static String urlToBase64(String url) {
+        URI actualUrl;
         try {
-            profileField = Objects.requireNonNull(skullMeta).getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(skullMeta, profile);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
+            actualUrl = new URI(url);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
-        meta = skullMeta;
-        item.setItemMeta(meta);
+        String toEncode = "{\"textures\":{\"SKIN\":{\"url\":\"" + actualUrl + "\"}}}";
+        return Base64.getEncoder().encodeToString(toEncode.getBytes());
+    }
+
+    public ItemBuilder skullTexture(String texture) {
+        ItemStack parsedItem = SkullCreator.itemWithBase64(item, texture);
+        meta = parsedItem.getItemMeta();
         return this;
     }
 

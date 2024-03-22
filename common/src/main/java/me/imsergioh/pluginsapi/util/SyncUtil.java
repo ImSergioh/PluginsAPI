@@ -4,7 +4,6 @@ import java.util.concurrent.*;
 
 public class SyncUtil {
 
-    private static final ExecutorService executorService = Executors.newSingleThreadExecutor(r -> new Thread(r, "SyncUtil"));
     private static final ScheduledExecutorService scheduledFuture = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "SyncUtil"));
 
 
@@ -13,12 +12,20 @@ public class SyncUtil {
     }
 
     public static void async(Runnable runnable) {
-        executorService.submit(runnable);
+        CompletableFuture.runAsync(runnable);
     }
 
-    public static ScheduledFuture<?> later(Runnable runnable, long millis) {
-        return scheduledFuture.schedule(runnable, millis, TimeUnit.MILLISECONDS);
+    public static CompletableFuture<Void> later(Runnable runnable, long millis) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        scheduledFuture.schedule(() -> {
+            try {
+                runnable.run();
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        }, millis, TimeUnit.MILLISECONDS);
 
+        return future;
     }
-
 }

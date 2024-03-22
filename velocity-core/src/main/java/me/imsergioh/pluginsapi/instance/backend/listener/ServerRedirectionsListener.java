@@ -3,6 +3,7 @@ package me.imsergioh.pluginsapi.instance.backend.listener;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import me.imsergioh.pluginsapi.handler.PubSubConnectionHandler;
+import me.imsergioh.pluginsapi.instance.backend.PlayerServerConnectionsHandler;
 import me.imsergioh.pluginsapi.instance.backend.request.ServerRedirectionRequest;
 import me.imsergioh.pluginsapi.instance.handler.RedisPubSubListener;
 import me.imsergioh.pluginsapi.manager.VelocityPluginsAPI;
@@ -44,7 +45,7 @@ public class ServerRedirectionsListener extends RedisPubSubListener {
         // Random selection of server by list:
         RegisteredServer target = list.get(new Random().nextInt(list.size()));
         if (target != null) {
-            player.createConnectionRequest(target).fireAndForget();
+            PlayerServerConnectionsHandler.get(player).sendConnectionQueue(target);
         } else {
             player.sendMessage(Component.text(NamedTextColor.RED + "Servers not found."));
         }

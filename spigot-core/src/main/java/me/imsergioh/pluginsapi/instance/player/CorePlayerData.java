@@ -2,6 +2,7 @@ package me.imsergioh.pluginsapi.instance.player;
 
 import com.mongodb.client.MongoCollection;
 import lombok.Getter;
+import me.imsergioh.pluginsapi.SpigotPluginsAPI;
 import me.imsergioh.pluginsapi.connection.MongoDBConnection;
 import me.imsergioh.pluginsapi.event.FirstCorePlayerJoinEvent;
 import me.imsergioh.pluginsapi.event.PlayerDataLoadedEvent;
@@ -10,6 +11,7 @@ import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.util.SyncUtil;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
@@ -71,7 +73,7 @@ public class CorePlayerData {
         PlayerLanguages.register(corePlayer.getUUID(), language);
         registerData("lang", PlayerLanguages.get(corePlayer.getUUID()).name());
 
-        SyncUtil.async(() -> {
+        Bukkit.getScheduler().runTask(SpigotPluginsAPI.getPlugin(), () -> {
             Bukkit.getPluginManager().callEvent(new PlayerDataLoadedEvent(corePlayer, this));
         });
     }

@@ -48,9 +48,10 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     public CorePlayer(UUID uuid) {
         super(uuid);
         this.uuid = uuid;
+        players.put(uuid, this);
+
         this.bukkitPlayer = Bukkit.getPlayer(uuid);
         this.playerData = new CorePlayerData(this);
-        players.put(uuid, this);
         load();
         setupIfPlayerIsOnline();
     }
