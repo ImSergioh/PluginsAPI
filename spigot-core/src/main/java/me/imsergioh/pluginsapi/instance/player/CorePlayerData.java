@@ -30,8 +30,7 @@ public class CorePlayerData {
             public void run() {
                 loadData();
                 registerData("firstLogin", System.currentTimeMillis());
-                if (document != null)
-                    document.put("lastLogin", System.currentTimeMillis());
+                document.put("lastLogin", System.currentTimeMillis());
             }
         }.runTaskAsynchronously(SpigotPluginsAPI.getPlugin());
     }
@@ -43,7 +42,6 @@ public class CorePlayerData {
     }
 
     public void registerData(String path, Object value) {
-        if (document == null) return;
         if (document.containsKey(path)) return;
         document.put(path, value);
     }
@@ -53,7 +51,6 @@ public class CorePlayerData {
     }
 
     private void loadData() {
-        if (MongoDBConnection.mainConnection == null) return;
         // QUERY DOCUMENT MONGODB AND SET IF FOUND
         Document queryDocument = document;
         Document document = MongoDBConnection.mainConnection

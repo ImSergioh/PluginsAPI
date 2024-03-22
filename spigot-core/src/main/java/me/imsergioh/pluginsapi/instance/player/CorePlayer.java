@@ -3,6 +3,7 @@ package me.imsergioh.pluginsapi.instance.player;
 import lombok.Getter;
 import lombok.Setter;
 import me.imsergioh.pluginsapi.SpigotPluginsAPI;
+import me.imsergioh.pluginsapi.connection.MongoDBConnection;
 import me.imsergioh.pluginsapi.data.player.OfflineCorePlayer;
 import me.imsergioh.pluginsapi.event.PlayerTickEvent;
 import me.imsergioh.pluginsapi.handler.LanguagesHandler;
@@ -51,7 +52,8 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         players.put(uuid, this);
 
         this.bukkitPlayer = Bukkit.getPlayer(uuid);
-        this.playerData = new CorePlayerData(this);
+        if (MongoDBConnection.mainConnection != null)
+            this.playerData = new CorePlayerData(this);
         load();
         setupIfPlayerIsOnline();
     }
