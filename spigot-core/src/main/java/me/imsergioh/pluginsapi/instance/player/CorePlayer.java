@@ -35,7 +35,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     protected boolean isOnline;
 
     @Getter
-    protected final CorePlayerData playerData;
+    protected CorePlayerData playerData;
 
     @Getter
     @Setter
@@ -90,7 +90,8 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     @Override
     public void unload() {
         PlayerLanguages.unregister(uuid);
-        playerData.save();
+        if (playerData != null)
+            playerData.save();
         super.unload();
     }
 
