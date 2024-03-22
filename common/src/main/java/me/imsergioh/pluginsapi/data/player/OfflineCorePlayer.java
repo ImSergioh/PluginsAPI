@@ -20,6 +20,7 @@ public abstract class OfflineCorePlayer<T> extends FactoryValue<T> {
 
     @Override
     public void load() {
+        if (MongoDBConnection.mainConnection == null) return;
         offlineDataDocument = getDocument();
     }
 
