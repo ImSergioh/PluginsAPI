@@ -53,7 +53,7 @@ public class SpigotPluginsAPI {
                     corePlayer.tickTask();
                 }
             }
-        }.runTaskTimerAsynchronously(plugin, 0, 1);
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     public static void registerCommands(BukkitCommand... commands) {
