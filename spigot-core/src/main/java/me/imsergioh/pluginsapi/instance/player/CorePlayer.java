@@ -107,16 +107,16 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
     public void setLanguage(Language language) {
         Language previousLang = getLanguage();
         if (previousLang.equals(language)) return;
-        Bukkit.getPluginManager()
-                .callEvent(new PlayerLanguageChangeEvent(this, previousLang, language));
+        Bukkit.getScheduler().runTask(SpigotPluginsAPI.getPlugin(), () -> {
+            Bukkit.getPluginManager()
+                    .callEvent(new PlayerLanguageChangeEvent(this, previousLang, language));
+        });
         playerData.setData("lang", language.name());
         PlayerLanguages.register(uuid, language);
         sendLanguageMessage("general", "lang_change");
         if (bukkitPlayer != null)
-            SyncUtil.async(() -> {
-                Bukkit.getPluginManager()
-                        .callEvent(new PlayerLanguageChangedEvent(this, previousLang, language));
-            });
+            Bukkit.getScheduler().runTask(SpigotPluginsAPI.getPlugin(), () -> Bukkit.getPluginManager()
+                .callEvent(new PlayerLanguageChangedEvent(this, previousLang, language)));
     }
 
     public void sendLanguageMessage(String holderName, String key, Object... vars) {
