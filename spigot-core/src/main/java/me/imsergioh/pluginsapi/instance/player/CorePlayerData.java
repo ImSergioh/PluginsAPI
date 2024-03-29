@@ -60,7 +60,9 @@ public class CorePlayerData {
             this.document = document;
         } else if (corePlayer != null) {
             // Document not found: Calls first core player join event (if connected)
-            Bukkit.getPluginManager().callEvent(new FirstCorePlayerJoinEvent(corePlayer));
+            Bukkit.getScheduler().runTask(SpigotPluginsAPI.getPlugin(), () -> {
+                Bukkit.getPluginManager().callEvent(new FirstCorePlayerJoinEvent(corePlayer));
+            });
         }
 
         // Return if not connected
