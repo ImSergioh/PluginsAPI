@@ -12,8 +12,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class SetLanguageMenu extends CoreMenu {
 
-    private static ItemStack ES_Item;
-    private static ItemStack EN_Item;
+    private ItemStack ES_Item;
+    private ItemStack EN_Item;
 
     public SetLanguageMenu(Player player) {
         super(player, 45, title(player));
@@ -22,22 +22,18 @@ public class SetLanguageMenu extends CoreMenu {
     @Override
     public void load() {
         set(8, getCloseMenuItem(initPlayer), "closeInv");
-        set(21, getES_Item(initPlayer), "cmd lang ES");
-        set(23, getEN_Item(initPlayer), "cmd lang EN");
+        set(21, getES_Item(initPlayer), "cmd lang ES", "closeInv");
+        set(23, getEN_Item(initPlayer), "cmd lang EN", "closeInv");
         set(40, getPreviousMenuItem(initPlayer), "openPrevious");
     }
 
     private ItemStack getLangItem(Player player, Language language, String skulltexture) {
         String name = LanguageMessages.get().get(player, language, "lang_" + language.name() + "_name");
-        String material = "SKULL_ITEM";
-        String version = Bukkit.getVersion();
-        if (version.contains("1.20")) {
-            material = "LEGACY_SKULL_ITEM";
-        }
-        ItemStack item = ItemBuilder.of(Material.getMaterial(material))
+        ItemStack item = ItemBuilder.of(Material.PLAYER_HEAD)
                 .data(3)
                 .name(name)
-                .skullTexture(skulltexture).get(player);
+                .skullTexture(skulltexture)
+                .get(player);
         return item;
     }
 
