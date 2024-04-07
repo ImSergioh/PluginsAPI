@@ -80,9 +80,9 @@ public class CorePlayerData {
         PlayerLanguages.register(corePlayer.getUUID(), language);
         registerData("lang", PlayerLanguages.get(corePlayer.getUUID()).name());
 
-        Bukkit.getScheduler().runTask(SpigotPluginsAPI.getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(SpigotPluginsAPI.getPlugin(), () -> {
             Bukkit.getPluginManager().callEvent(new PlayerDataLoadedEvent(corePlayer, this));
-        });
+        }, 2);
     }
 
 
