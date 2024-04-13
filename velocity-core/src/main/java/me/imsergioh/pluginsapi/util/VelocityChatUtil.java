@@ -3,15 +3,9 @@ package me.imsergioh.pluginsapi.util;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-
-import java.text.MessageFormat;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class VelocityChatUtil {
-
-    public static String color(String message, Object... args) {
-        String formattedMessageWithArgs = MessageFormat.format(message, args);
-        return ChatUtil.color(formattedMessageWithArgs);
-    }
 
     public static String parse(String message, Object... args) {
         return parseToComponent(message, args).insertion();
@@ -23,14 +17,17 @@ public class VelocityChatUtil {
 
     public static Component parseToComponent(String message, Object... args) {
         message = ChatUtil.parse(message, args);
+        Component legacyComponent = LegacyComponentSerializer.legacySection().deserialize(message);
         MiniMessage miniMessage = MiniMessage.miniMessage();
-        return miniMessage.deserialize(message);
+        String miniMessageText = miniMessage.serialize(legacyComponent);
+        return miniMessage.deserialize(miniMessageText);
     }
 
     public static Component parseToComponent(Player player, String message, Object... args) {
         message = ChatUtil.parse(player, message, args);
+        Component legacyComponent = LegacyComponentSerializer.legacySection().deserialize(message);
         MiniMessage miniMessage = MiniMessage.miniMessage();
-        return miniMessage.deserialize(message);
+        String miniMessageText = miniMessage.serialize(legacyComponent);
+        return miniMessage.deserialize(miniMessageText);
     }
-
 }
