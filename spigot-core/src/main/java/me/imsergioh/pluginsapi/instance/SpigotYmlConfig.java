@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import me.imsergioh.pluginsapi.instance.item.ItemBuilder;
-import me.imsergioh.pluginsapi.util.ChatUtil;
 import me.imsergioh.pluginsapi.util.FileUtil;
 
 import java.io.File;
@@ -67,7 +66,7 @@ public class SpigotYmlConfig {
 
         if (section.contains("amount")) builder.amount(section.getInt("amount"));
         if (section.contains("data")) builder.data(section.getInt("data"));
-        if (section.contains("name")) builder.name(ChatUtil.parse(player, section.getString("name")));
+        if (section.contains("name")) builder.name(section.getString("name"));
         if (section.contains("lore")) builder.lore(section.getStringList("lore"));
         return builder;
     }

@@ -1,26 +1,21 @@
 package me.imsergioh.pluginsapi.instance.item;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
 import me.imsergioh.pluginsapi.util.LanguageUtil;
+import me.imsergioh.pluginsapi.util.PaperChatUtil;
 import me.imsergioh.pluginsapi.util.SkullCreator;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import me.imsergioh.pluginsapi.util.ChatUtil;
 
-import java.lang.reflect.Field;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.*;
 
 public class ItemBuilder {
@@ -79,6 +74,7 @@ public class ItemBuilder {
 
     public ItemBuilder skullTexture(String texture) {
         ItemStack parsedItem = SkullCreator.itemWithBase64(item, texture);
+        assert parsedItem != null;
         meta = parsedItem.getItemMeta();
         return this;
     }
@@ -92,35 +88,17 @@ public class ItemBuilder {
 
     public ItemStack get(Language language) {
         if (name != null)
-            meta.setDisplayName(ChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
-
-        if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(language, line), loreArgs));
-            for (String line : lore) {
-                List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
-                parsedLore.addAll(list);
-            }
-            meta.setLore(parsedLore);
-        }
+            meta.displayName(PaperChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
         item.setItemMeta(meta);
         return item;
     }
 
     public ItemStack get() {
         if (name != null)
-            meta.setDisplayName(ChatUtil.parse(name, nameArgs));
+            meta.displayName(PaperChatUtil.parse(name, nameArgs));
 
         if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
-            for (String line : lore) {
-                List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
-                parsedLore.addAll(list);
-            }
-            meta.setLore(parsedLore);
+            meta.lore(modernLore(null));
         }
         item.setItemMeta(meta);
         return item;
@@ -128,17 +106,10 @@ public class ItemBuilder {
 
     public ItemStack get(Player player) {
         if (name != null)
-            meta.setDisplayName(ChatUtil.parse(player, name, nameArgs));
+            meta.displayName(PaperChatUtil.parse(player, name, nameArgs));
 
         if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
-            for (String line : lore) {
-                List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
-                parsedLore.addAll(list);
-            }
-            meta.setLore(parsedLore);
+            meta.lore(modernLore(player));
         }
 
         item.setItemMeta(meta);
@@ -157,22 +128,12 @@ public class ItemBuilder {
         Bukkit.getPluginManager().registerEvents(new ItemActionListeners(), plugin);
     }
 
-    public static String getID(ItemStack item) {
-        StringBuilder builder = new StringBuilder(item.getType().name() + item.getAmount());
-
-        try {
-            builder.append(item.getItemMeta().getDisplayName());
-        } catch (Exception ignore) {
+    public List<Component> modernLore(Player player) {
+        List<Component> list = new ArrayList<>();
+        for (String line : lore) {
+            Component formatted = player == null ? PaperChatUtil.parse(line, loreArgs) : PaperChatUtil.parse(player, line, loreArgs);
+            list.add(formatted);
         }
-
-        try {
-            builder.append(item.getItemMeta().getLore());
-        } catch (Exception e) {
-        }
-
-        if (item.getItemMeta().getLore() != null) {
-            builder.append(item.getItemMeta().getLore());
-        }
-        return builder.toString();
+        return list;
     }
 }
