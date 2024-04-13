@@ -1,26 +1,22 @@
 package me.imsergioh.pluginsapi.instance.item;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
 import me.imsergioh.pluginsapi.util.LanguageUtil;
+import me.imsergioh.pluginsapi.util.PaperChatUtil;
 import me.imsergioh.pluginsapi.util.SkullCreator;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import me.imsergioh.pluginsapi.util.ChatUtil;
 
-import java.lang.reflect.Field;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.*;
 
 public class ItemBuilder {
@@ -31,7 +27,7 @@ public class ItemBuilder {
     private String name;
     private Object[] nameArgs;
 
-    private List<String> lore = new ArrayList<>();
+    private List<Component> lore = new ArrayList<>();
     private Object[] loreArgs;
 
     protected ItemBuilder(Material material) {
@@ -46,13 +42,13 @@ public class ItemBuilder {
     }
 
     public ItemBuilder lore(List<String> lore, Object... args) {
-        this.lore = lore;
+        this.lore = parseLegacyLore(lore);
         this.loreArgs = args;
         return this;
     }
 
     public ItemBuilder lore(String... lores) {
-        this.lore = Arrays.asList(lores);
+        this.lore = parseLegacyLore(Arrays.asList(lores));
         return this;
     }
 
@@ -92,17 +88,11 @@ public class ItemBuilder {
 
     public ItemStack get(Language language) {
         if (name != null)
-            meta.setDisplayName(ChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
+            meta.displayName(PaperChatUtil.parseToComponent(LanguageUtil.parse(language, name), nameArgs));
 
         if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(language, line), loreArgs));
-            for (String line : lore) {
-                List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
-                parsedLore.addAll(list);
-            }
-            meta.setLore(parsedLore);
+            List<Component> parsedLore = new ArrayList<>();
+            meta.lore(parsedLore);
         }
         item.setItemMeta(meta);
         return item;
@@ -113,14 +103,7 @@ public class ItemBuilder {
             meta.setDisplayName(ChatUtil.parse(name, nameArgs));
 
         if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
-            for (String line : lore) {
-                List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
-                parsedLore.addAll(list);
-            }
-            meta.setLore(parsedLore);
+            meta.lore(lore);
         }
         item.setItemMeta(meta);
         return item;
@@ -131,14 +114,7 @@ public class ItemBuilder {
             meta.setDisplayName(ChatUtil.parse(player, name, nameArgs));
 
         if (!lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>();
-            lore.replaceAll(line -> ChatUtil.parse(line, loreArgs));
-            for (String line : lore) {
-                List<String> list = Arrays.asList(line.split("\n"));
-                list.replaceAll(s -> s.startsWith("&") ? ChatUtil.color(s) : ChatUtil.color("&7" + s));
-                parsedLore.addAll(list);
-            }
-            meta.setLore(parsedLore);
+            meta.lore(lore);
         }
 
         item.setItemMeta(meta);
@@ -175,4 +151,13 @@ public class ItemBuilder {
         }
         return builder.toString();
     }
+
+    private List<Component> parseLegacyLore(List<String> inputList) {
+        List<Component> list = new ArrayList<>();
+        for (String line : inputList) {
+            list.add(PaperChatUtil.parseToComponent(line, loreArgs));
+        }
+        return list;
+    }
+
 }
