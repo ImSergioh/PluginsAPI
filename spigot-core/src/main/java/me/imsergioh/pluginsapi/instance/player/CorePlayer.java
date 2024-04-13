@@ -13,6 +13,8 @@ import me.imsergioh.pluginsapi.event.PlayerLanguageChangeEvent;
 import me.imsergioh.pluginsapi.event.PlayerLanguageChangedEvent;
 import me.imsergioh.pluginsapi.instance.menu.CoreMenu;
 import me.imsergioh.pluginsapi.util.ChatUtil;
+import me.imsergioh.pluginsapi.util.PaperChatUtil;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import me.imsergioh.pluginsapi.util.SyncUtil;
@@ -124,14 +126,14 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
         bukkitPlayer.sendMessage(getLanguageMessage(holderName, key, vars));
     }
 
-    public String getLanguageMessage(String holderName, String key, Object... vars) {
+    public Component getLanguageMessage(String holderName, String key, Object... vars) {
         String message = null;
         try {
             message = LanguagesHandler.get(getLanguage())
                     .get(holderName).getString(key);
         } catch (Exception ignore) {
         }
-        return message == null ? "undefined" : ChatUtil.parse(bukkitPlayer, message, vars);
+        return message == null ? Component.text("undefined") : PaperChatUtil.parse(bukkitPlayer, message, vars);
     }
 
     public Language getLanguage() {

@@ -8,6 +8,7 @@ import me.imsergioh.pluginsapi.instance.backend.request.ServerRedirectionRequest
 import me.imsergioh.pluginsapi.instance.handler.RedisPubSubListener;
 import me.imsergioh.pluginsapi.manager.VelocityPluginsAPI;
 import me.imsergioh.pluginsapi.util.ChatUtil;
+import me.imsergioh.pluginsapi.util.VelocityChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -38,7 +39,7 @@ public class ServerRedirectionsListener extends RedisPubSubListener {
             list.add(server);
         }
         if (list.isEmpty()) {
-            player.sendMessage(Component.text(ChatUtil.parse("&cWe didn't found servers to connect to!")));
+            player.sendMessage(VelocityChatUtil.parse("<red>We didn't found servers to connect to!"));
             return;
         }
 

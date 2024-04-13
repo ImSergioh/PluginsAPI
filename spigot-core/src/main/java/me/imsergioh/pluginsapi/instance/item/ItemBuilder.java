@@ -2,6 +2,7 @@ package me.imsergioh.pluginsapi.instance.item;
 
 import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
+import me.imsergioh.pluginsapi.util.ChatUtil;
 import me.imsergioh.pluginsapi.util.LanguageUtil;
 import me.imsergioh.pluginsapi.util.PaperChatUtil;
 import me.imsergioh.pluginsapi.util.SkullCreator;
@@ -16,7 +17,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
 
 public class ItemBuilder {
 
@@ -89,6 +93,11 @@ public class ItemBuilder {
     public ItemStack get(Language language) {
         if (name != null)
             meta.displayName(PaperChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
+        if (lore != null && !lore.isEmpty()) {
+            List<String> parsedLore = new ArrayList<>(lore);
+            parsedLore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(language, line)));
+            meta.lore(modernLore(parsedLore, null));
+        }
         item.setItemMeta(meta);
         return item;
     }
@@ -98,7 +107,7 @@ public class ItemBuilder {
             meta.displayName(PaperChatUtil.parse(name, nameArgs));
 
         if (!lore.isEmpty()) {
-            meta.lore(modernLore(null));
+            meta.lore(modernLore(lore, null));
         }
         item.setItemMeta(meta);
         return item;
@@ -109,7 +118,7 @@ public class ItemBuilder {
             meta.displayName(PaperChatUtil.parse(player, name, nameArgs));
 
         if (!lore.isEmpty()) {
-            meta.lore(modernLore(player));
+            meta.lore(modernLore(lore, player));
         }
 
         item.setItemMeta(meta);
@@ -128,11 +137,14 @@ public class ItemBuilder {
         Bukkit.getPluginManager().registerEvents(new ItemActionListeners(), plugin);
     }
 
-    public List<Component> modernLore(Player player) {
+    public List<Component> modernLore(List<String> initialLore, Player player) {
         List<Component> list = new ArrayList<>();
-        for (String line : lore) {
-            Component formatted = player == null ? PaperChatUtil.parse(line, loreArgs) : PaperChatUtil.parse(player, line, loreArgs);
-            list.add(formatted);
+        for (String line : initialLore) {
+            String[] lines = line.split("\n");
+            for (String subLine : lines) {
+                Component formatted = player == null ? PaperChatUtil.parse(subLine, loreArgs) : PaperChatUtil.parse(player, subLine, loreArgs);
+                list.add(formatted);
+            }
         }
         return list;
     }
