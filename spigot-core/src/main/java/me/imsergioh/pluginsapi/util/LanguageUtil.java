@@ -3,6 +3,8 @@ package me.imsergioh.pluginsapi.util;
 import me.imsergioh.pluginsapi.handler.LanguagesHandler;
 import me.imsergioh.pluginsapi.language.Language;
 
+import java.util.List;
+
 public class LanguageUtil {
 
     public static String parse(Language language, String message) {
@@ -28,6 +30,13 @@ public class LanguageUtil {
 
             if (object instanceof String) {
                 args[i] = (String) object;
+            } else if (object instanceof List) {
+                StringBuilder stringBuilder = new StringBuilder();
+                List<?> list = (List<?>) object;
+                for (Object o : list) {
+                    stringBuilder.append(o.toString() + "\n");
+                }
+                args[i] = stringBuilder.toString();
             } else {
                 args[i] = object.toString();
             }
