@@ -4,6 +4,7 @@ import me.imsergioh.pluginsapi.handler.VariablesHandler;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class ChatUtil {
 
@@ -48,7 +49,11 @@ public class ChatUtil {
 
     public static <Player> String parse(Player player, String message, Object... args) {
         message = parse(player, message);
-        return MessageFormat.format(message, args);
+        try {
+            return MessageFormat.format(message, args);
+        } catch (Exception e) {
+            return message;
+        }
     }
 
     public static String parse(String message, Object... args) {

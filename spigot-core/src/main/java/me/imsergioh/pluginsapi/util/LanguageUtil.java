@@ -19,7 +19,8 @@ public class LanguageUtil {
                 continue;
             }
             String messageHolder = arg.split("\\.")[1];
-            String path = arg.split("\\.")[2].replace(">", "");
+            String path = arg.replaceAll("^.*?\\.([^>]+)>$", "$1");
+            if (path.startsWith(messageHolder + ".")) path = path.replace(messageHolder + ".", "");
             Object object = LanguagesHandler
                     .get(language)
                     .get(messageHolder)
@@ -28,7 +29,7 @@ public class LanguageUtil {
             if (object instanceof String) {
                 args[i] = (String) object;
             } else {
-                args[i] = "LANGUAGE_ERROR";
+                args[i] = object.toString();
             }
         }
         return parse(language, String.join(" ", args));
