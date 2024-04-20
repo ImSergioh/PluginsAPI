@@ -1,5 +1,6 @@
 package me.imsergioh.pluginsapi.instance.item;
 
+import me.imsergioh.pluginsapi.instance.PlayerLanguages;
 import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
 import me.imsergioh.pluginsapi.util.ChatUtil;
@@ -94,9 +95,8 @@ public class ItemBuilder {
         if (name != null)
             meta.displayName(PaperChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
         if (lore != null && !lore.isEmpty()) {
-            List<String> parsedLore = new ArrayList<>(lore);
-            parsedLore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(language, line)));
-            meta.lore(modernLore(parsedLore, null));
+            lore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(language, line)));
+            meta.lore(modernLore(lore, null));
         }
         item.setItemMeta(meta);
         return item;
@@ -107,6 +107,7 @@ public class ItemBuilder {
             meta.displayName(PaperChatUtil.parse(name, nameArgs));
 
         if (!lore.isEmpty()) {
+            lore.replaceAll(ChatUtil::parse);
             meta.lore(modernLore(lore, null));
         }
         item.setItemMeta(meta);
@@ -118,6 +119,7 @@ public class ItemBuilder {
             meta.displayName(PaperChatUtil.parse(player, name, nameArgs));
 
         if (!lore.isEmpty()) {
+            lore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(PlayerLanguages.get(player.getUniqueId()), line)));
             meta.lore(modernLore(lore, player));
         }
 
@@ -140,9 +142,14 @@ public class ItemBuilder {
     public List<Component> modernLore(List<String> initialLore, Player player) {
         List<Component> list = new ArrayList<>();
         for (String line : initialLore) {
-            String[] lines = line.split("\n");
-            for (String subLine : lines) {
-                Component formatted = player == null ? PaperChatUtil.parse(subLine, loreArgs) : PaperChatUtil.parse(player, subLine, loreArgs);
+            if (line.contains("\n")) {
+                String[] lines = line.split("\n");
+                for (String subLine : lines) {
+                    Component formatted = player == null ? PaperChatUtil.parse(subLine, loreArgs) : PaperChatUtil.parse(player, subLine, loreArgs);
+                    list.add(formatted);
+                }
+            } else {
+                Component formatted = player == null ? PaperChatUtil.parse(line, loreArgs) : PaperChatUtil.parse(player, line, loreArgs);
                 list.add(formatted);
             }
         }
