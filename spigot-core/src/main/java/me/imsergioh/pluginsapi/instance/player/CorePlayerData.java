@@ -38,7 +38,12 @@ public class CorePlayerData {
     public CorePlayerData(UUID uuid) {
         this.corePlayer = CorePlayer.get(uuid);
         document = new Document("_id", uuid.toString());
-        loadData();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                loadData();
+            }
+        }.runTaskAsynchronously(SpigotPluginsAPI.getPlugin());
     }
 
     public void registerData(String path, Object value) {
