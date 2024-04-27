@@ -27,6 +27,11 @@ public class FilePluginConfig extends Document implements IPluginConfig {
         FileUtil.setup(file);
     }
 
+    public FilePluginConfig(Document document) {
+        this.filePath = null;
+        putAll(document);
+    }
+
     @Override
     public FilePluginConfig save() {
         try {
