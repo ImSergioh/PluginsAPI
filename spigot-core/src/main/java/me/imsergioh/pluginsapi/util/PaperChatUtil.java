@@ -1,27 +1,22 @@
 package me.imsergioh.pluginsapi.util;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PaperChatUtil {
 
-    private static final Pattern colorPattern = Pattern.compile("§[0-9a-fA-F]");
+    private static final Pattern legacyHexPattern = Pattern.compile("§[0-9a-fA-F]");
 
     public static Component parse(String message, Object... args) {
         message = ChatUtil.parse(message, args);
         MiniMessage miniMessage = MiniMessage.miniMessage();
+        message = translate(message);
         message = parseLegacyToMiniMessageHex(message);
         return miniMessage.deserialize(message)
                 .decoration(TextDecoration.ITALIC, false);
@@ -30,14 +25,32 @@ public class PaperChatUtil {
     public static Component parse(Player player, String message, Object... args) {
         message = ChatUtil.parse(player, message, args);
         MiniMessage miniMessage = MiniMessage.miniMessage();
+        message = translate(message);
         message = parseLegacyToMiniMessageHex(message);
         return miniMessage.deserialize(message)
                 .decoration(TextDecoration.ITALIC, false);
     }
 
+    public static String translate(String text) {
+        Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
+        Matcher matcher = hexPattern.matcher(text);
+        StringBuffer buffer = new StringBuffer(text.length() + 4 * 8);
+
+        while (matcher.find()) {
+            String group = matcher.group(1);
+            matcher.appendReplacement(buffer, ChatColor.COLOR_CHAR + "x"
+                    + ChatColor.COLOR_CHAR + group.charAt(0) + ChatColor.COLOR_CHAR + group.charAt(1)
+                    + ChatColor.COLOR_CHAR + group.charAt(2) + ChatColor.COLOR_CHAR + group.charAt(3)
+                    + ChatColor.COLOR_CHAR + group.charAt(4) + ChatColor.COLOR_CHAR + group.charAt(5)
+            );
+        }
+
+        return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+    }
+
     public static String parseLegacyToMiniMessageHex(String input) {
         // Convertir códigos de color §x a MiniMessage hex
-        Matcher matcher = colorPattern.matcher(input);
+        Matcher matcher = legacyHexPattern.matcher(input);
         StringBuffer output = new StringBuffer();
         String lastColor = null;
 
@@ -53,7 +66,7 @@ public class PaperChatUtil {
 
         if (lastColor != null) {
             // Si hay un color al final del texto, añadirlo al final de la cadena
-            output.insert(0, "<#" + lastColor + ">");
+            output.insert(0, "<color:#" + lastColor + ">");
         }
         return output.toString();
     }

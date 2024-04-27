@@ -9,11 +9,14 @@ import org.bson.Document;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.*;
 
 @Getter
 public class FilePluginConfig extends Document implements IPluginConfig {
 
     private final String filePath;
+
+    private static final Map<String, String> migrations = new HashMap<>();
 
     public FilePluginConfig(String filePath) {
         this(new File(filePath));
@@ -91,9 +94,25 @@ public class FilePluginConfig extends Document implements IPluginConfig {
         }
     }
 
+    public void migrateConfigPath(String oldPath, String newPath) {
+        Object object = get(oldPath);
+        if (object == null) return;
+        registerDefault(newPath, object);
+        remove(oldPath);
+    }
+
     @Override
     public FilePluginConfig registerDefault(String path, Object value) {
         if (containsKey(path)) return this;
+        if (value instanceof String) {
+            String strValue = (String) value;
+            // String value with \n to list
+            if (strValue.contains("\n")) {
+                List<String> list = new ArrayList<>();
+                Collections.addAll(list, strValue.split("\n"));
+                value = list;
+            }
+        }
         this.put(path, value);
         return this;
     }

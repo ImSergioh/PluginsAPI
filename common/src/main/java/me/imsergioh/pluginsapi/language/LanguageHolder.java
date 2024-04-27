@@ -7,7 +7,7 @@ import java.util.*;
 
 public class LanguageHolder {
 
-    private static final String FOLDER_PATH = "/home/lang";
+    private static final String FOLDER_PATH = "/home/newlang";
     @Getter
     private final File dir;
     @Getter
@@ -59,5 +59,9 @@ public class LanguageHolder {
         LanguageMessagesHolder holder = messagesHolders.get(name);
         holder.registerUsage();
         return holder;
+    }
+
+    public Collection<LanguageMessagesHolder> getMessagesHolders() {
+        return new ArrayList<>(messagesHolders.values());
     }
 }

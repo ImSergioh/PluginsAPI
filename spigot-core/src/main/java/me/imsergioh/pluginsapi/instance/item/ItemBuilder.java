@@ -119,7 +119,7 @@ public class ItemBuilder {
             meta.displayName(PaperChatUtil.parse(player, name, nameArgs));
 
         if (!lore.isEmpty()) {
-            lore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(PlayerLanguages.get(player.getUniqueId()), line)));
+            lore.replaceAll(line -> LanguageUtil.parse(PlayerLanguages.get(player.getUniqueId()), line));
             meta.lore(modernLore(lore, player));
         }
 

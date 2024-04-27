@@ -15,6 +15,7 @@ public class VelocityChatUtil {
     public static Component parse(String message, Object... args) {
         message = ChatUtil.parse(message, args);
         MiniMessage miniMessage = MiniMessage.miniMessage();
+        message = translate(message);
         message = parseLegacyToMiniMessageHex(message);
         return miniMessage.deserialize(message)
                 .decoration(TextDecoration.ITALIC, false);
@@ -23,9 +24,28 @@ public class VelocityChatUtil {
     public static Component parse(Player player, String message, Object... args) {
         message = ChatUtil.parse(player, message, args);
         MiniMessage miniMessage = MiniMessage.miniMessage();
+        message = translate(message);
         message = parseLegacyToMiniMessageHex(message);
         return miniMessage.deserialize(message)
                 .decoration(TextDecoration.ITALIC, false);
+    }
+
+    public static String translate(String text) {
+        Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
+        Matcher matcher = hexPattern.matcher(text);
+        StringBuffer buffer = new StringBuffer(text.length() + 4 * 8);
+
+        while (matcher.find()) {
+            String group = matcher.group(1);
+            char COLOR_CHAR = '§';
+            matcher.appendReplacement(buffer, COLOR_CHAR + "x"
+                    + COLOR_CHAR + group.charAt(0) + COLOR_CHAR + group.charAt(1)
+                    + COLOR_CHAR + group.charAt(2) + COLOR_CHAR + group.charAt(3)
+                    + COLOR_CHAR + group.charAt(4) + COLOR_CHAR + group.charAt(5)
+            );
+        }
+
+        return matcher.appendTail(buffer).toString();
     }
 
     public static String parseLegacyToMiniMessageHex(String input) {
