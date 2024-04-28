@@ -133,7 +133,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
                     .get(holderName).getString(key);
         } catch (Exception ignore) {
         }
-        return message == null ? Component.text("undefined") : PaperChatUtil.parse(bukkitPlayer, message, vars);
+        return message == null ? Component.text("undefined " + holderName + ":" + key) : PaperChatUtil.parse(bukkitPlayer, message, vars);
     }
 
     public Language getLanguage() {

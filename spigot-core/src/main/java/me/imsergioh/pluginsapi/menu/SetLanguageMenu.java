@@ -28,7 +28,7 @@ public class SetLanguageMenu extends CoreMenu {
     }
 
     private ItemStack getLangItem(Player player, Language language, String skulltexture) {
-        String name = LanguageMessages.get().get(player, language, "lang_" + language.name() + "_name");
+        String name = LanguageMessages.get().get(player, PlayerLanguages.get(player.getUniqueId()), "lang." + language.name() + ".name");
         ItemStack item = ItemBuilder.of(Material.PLAYER_HEAD)
                 .data(3)
                 .name(name)
@@ -38,7 +38,7 @@ public class SetLanguageMenu extends CoreMenu {
     }
 
     private static String title(Player player) {
-        return LanguageMessages.get().get(player, PlayerLanguages.get(player.getUniqueId()), "set_lang_title");
+        return LanguageMessages.get().get(player, PlayerLanguages.get(player.getUniqueId()), "setLangTitle");
     }
 
     public ItemStack getEN_Item(Player player) {

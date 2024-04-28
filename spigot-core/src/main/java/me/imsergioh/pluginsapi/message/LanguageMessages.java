@@ -20,6 +20,7 @@ public class LanguageMessages extends MultiLanguageRegistry {
 
     @Override
     public void load(LanguageMessagesHolder holder) {
+        holder.load();
         holder.registerDefault("setLangTitle", "Change language");
         holder.remove("selected");
 
