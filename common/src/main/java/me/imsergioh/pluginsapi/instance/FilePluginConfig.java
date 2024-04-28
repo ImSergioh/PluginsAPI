@@ -51,6 +51,31 @@ public class FilePluginConfig extends Document implements IPluginConfig {
     }
 
     @Override
+    public boolean containsKey(Object k) {
+        if (!(k instanceof String)) return super.containsKey(k);
+
+        String key = (String) k;
+        int dotIndex = key.indexOf('.');
+        if (dotIndex == -1) {
+            return super.containsKey(key);
+        } else {
+            String currentKey = key.substring(0, dotIndex);
+            String remainingKey = key.substring(dotIndex + 1);
+            Object value = this.get(currentKey);
+
+            while (value instanceof Document && remainingKey.contains(".")) {
+                Document docValue = (Document) value;
+                dotIndex = remainingKey.indexOf('.');
+                currentKey = remainingKey.substring(0, dotIndex);
+                remainingKey = remainingKey.substring(dotIndex + 1);
+                value = docValue.get(currentKey);
+            }
+
+            return value instanceof Document ? ((Document) value).containsKey(remainingKey) : value != null;
+        }
+    }
+
+    @Override
     public FilePluginConfig load() {
         try {
             Document document = ConfigUtil.convertFileToDocument(filePath);
