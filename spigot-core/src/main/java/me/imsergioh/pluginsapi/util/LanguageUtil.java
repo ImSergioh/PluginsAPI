@@ -14,34 +14,38 @@ public class LanguageUtil {
     }
 
     private static String get(Language language, String message) {
-        String[] args = message.split(" ");
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
-            if (!arg.contains("<lang.")) {
-                continue;
-            }
-            String messageHolder = arg.split("\\.")[1];
-            String path = arg.replaceAll("^.*?\\.([^>]+)>$", "$1");
-            if (path.startsWith(messageHolder + ".")) path = path.replace(messageHolder + ".", "");
-            Object object = LanguagesHandler
-                    .get(language)
-                    .get(messageHolder)
-                    .get(path);
-
-            if (object instanceof String) {
-                args[i] = (String) object;
-            } else if (object instanceof List) {
-                StringBuilder stringBuilder = new StringBuilder();
-                List<?> list = (List<?>) object;
-                for (Object o : list) {
-                    stringBuilder.append(o.toString() + "\n");
+        try {
+            String[] args = message.split(" ");
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                if (!arg.contains("<lang.")) {
+                    continue;
                 }
-                args[i] = stringBuilder.toString();
-            } else {
-                args[i] = object.toString();
+                String messageHolder = arg.split("\\.")[1];
+                String path = arg.replaceAll("^.*?\\.([^>]+)>$", "$1");
+                if (path.startsWith(messageHolder + ".")) path = path.replace(messageHolder + ".", "");
+                Object object = LanguagesHandler
+                        .get(language)
+                        .get(messageHolder)
+                        .get(path);
+
+                if (object instanceof String) {
+                    args[i] = (String) object;
+                } else if (object instanceof List) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    List<?> list = (List<?>) object;
+                    for (Object o : list) {
+                        stringBuilder.append(o.toString() + "\n");
+                    }
+                    args[i] = stringBuilder.toString();
+                } else {
+                    args[i] = object.toString();
+                }
             }
+            return parse(language, String.join(" ", args));
+        } catch (Exception e) {
+            return message;
         }
-        return parse(language, String.join(" ", args));
     }
 
 }
