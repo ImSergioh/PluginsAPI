@@ -11,7 +11,7 @@ public class LanguageMessages extends MultiLanguageRegistry {
 
     public String getSetLangTitle(Player player) {
         Language language = PlayerLanguages.get(player.getUniqueId());
-        return get(player, language, "set_lang_title");
+        return get(player, language, "setLangTitle");
     }
 
     public static LanguageMessages get() {
@@ -20,15 +20,15 @@ public class LanguageMessages extends MultiLanguageRegistry {
 
     @Override
     public void load(LanguageMessagesHolder holder) {
-        holder.registerDefault("set_lang_title", "Change language");
+        holder.registerDefault("setLangTitle", "Change language");
         holder.remove("selected");
 
-        holder.registerDefault("menu_previous", "Previous");
-        holder.registerDefault("menu_close", "Close");
+        holder.registerDefault("menuPrevious", "Previous");
+        holder.registerDefault("menuClose", "Close");
 
         for (Language language : Language.values()) {
-            holder.registerDefault("lang_" + language.name() + "_name", "LANG:" + language.name());
-            holder.registerDefault("lang_" + language.name() + "_name", "LANG:" + language.name());
+            holder.registerDefault("lang." + language.name() + ".name", "LANG:" + language.name());
+            holder.registerDefault("lang." + language.name() + ".name", "LANG:" + language.name());
         }
         holder.save();
     }
