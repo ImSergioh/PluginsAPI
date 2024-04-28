@@ -78,11 +78,11 @@ public abstract class CoreMenu implements ICoreMenu {
 
     public ItemStack getPreviousMenuItem(Player player) {
         return ItemBuilder.of(Material.BOOK)
-                .name("&c<lang.language.menu_previous>").get(player);
+                .name("&c<lang.language.menuPrevious>").get(player);
     }
 
     public ItemStack getCloseMenuItem(Player player) {
         return ItemBuilder.of(Material.BARRIER)
-                .name("&c<lang.language.menu_close>").get(player);
+                .name("&c<lang.language.menuClose>").get(player);
     }
 }
