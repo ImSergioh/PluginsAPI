@@ -38,6 +38,6 @@ public class CorePlayerListeners implements Listener {
         corePlayer.setCurrentMenuOpen(null);
 
         // TODO: REMOVE THIS
-        PaperChatUtil.send(player, TestMessages.notValid_input);
+        PaperChatUtil.send(player, TestMessages.testMessageList);
     }
 }

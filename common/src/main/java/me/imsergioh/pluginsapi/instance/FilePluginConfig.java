@@ -132,6 +132,29 @@ public class FilePluginConfig extends Document implements IPluginConfig {
     }
 
     @Override
+    public Object remove(Object key) {
+        if (!(key instanceof String keyString)) {
+            return null;
+        }
+
+        if (keyString.contains(".")) {
+            String[] keys = keyString.split("\\.");
+            Document current = this;
+            for (int i = 0; i < keys.length - 1; i++) {
+                String part = keys[i];
+                current = (Document) current.get(part);
+                if (current == null) {
+                    return null; // No se puede eliminar una clave que no existe
+                }
+            }
+            return current.remove(keys[keys.length - 1]); // Elimina y devuelve el valor eliminado
+        } else {
+            return super.remove(key);
+        }
+    }
+
+
+    @Override
     public FilePluginConfig registerDefault(String path, Object value) {
         if (containsKey(path)) return this;
         if (value instanceof String) {

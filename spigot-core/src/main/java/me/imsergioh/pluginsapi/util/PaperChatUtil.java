@@ -3,7 +3,6 @@ package me.imsergioh.pluginsapi.util;
 import me.imsergioh.pluginsapi.instance.PlayerLanguages;
 import me.imsergioh.pluginsapi.language.IMessageCategory;
 import me.imsergioh.pluginsapi.language.Language;
-import me.imsergioh.pluginsapi.language.TestMessages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -19,7 +18,7 @@ public class PaperChatUtil {
 
     public static void send(Player player, IMessageCategory category, Object... args) {
         Language language = PlayerLanguages.get(player.getUniqueId());
-        String message = category.getMessageOf(language);
+        String message = category.getObjectOfToString(language);
         player.sendMessage(parse(player, message, args));
     }
 

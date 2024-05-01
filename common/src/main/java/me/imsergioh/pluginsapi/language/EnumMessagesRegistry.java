@@ -15,9 +15,11 @@ public class EnumMessagesRegistry {
 
     private static void registerMessagesByClass(Class<? extends IMessageCategory> clazz) {
         LangMessagesInfo langMessagesInfo = clazz.getDeclaredAnnotation(LangMessagesInfo.class);
-        Map<String, String> fields = IMessageCategory.getMessagesMap(clazz);
+        Map<String, Object> fields = IMessageCategory.getMessagesMap(clazz);
         for (Language language : Language.values()) {
             LanguageMessagesHolder holder = LanguagesHandler.get(language).get(langMessagesInfo.name());
+            // Remove old paths
+            IMessageCategory.getOldPaths(clazz).forEach(holder::remove);
             fields.forEach(holder::registerDefault);
             holder.save();
         }
