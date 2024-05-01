@@ -1,5 +1,9 @@
 package me.imsergioh.pluginsapi.util;
 
+import me.imsergioh.pluginsapi.instance.PlayerLanguages;
+import me.imsergioh.pluginsapi.language.IMessageCategory;
+import me.imsergioh.pluginsapi.language.Language;
+import me.imsergioh.pluginsapi.language.TestMessages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -12,6 +16,12 @@ import java.util.regex.Pattern;
 public class PaperChatUtil {
 
     private static final Pattern legacyHexPattern = Pattern.compile("§[0-9a-fA-F]");
+
+    public static void send(Player player, IMessageCategory category, Object... args) {
+        Language language = PlayerLanguages.get(player.getUniqueId());
+        String message = category.getMessageOf(language);
+        player.sendMessage(parse(player, message, args));
+    }
 
     public static Component parse(String message, Object... args) {
         message = ChatUtil.parse(message, args);

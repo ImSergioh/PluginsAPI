@@ -1,5 +1,7 @@
 package me.imsergioh.pluginsapi.listener;
 
+import me.imsergioh.pluginsapi.language.TestMessages;
+import me.imsergioh.pluginsapi.util.PaperChatUtil;
 import org.bukkit.entity.Player;
 import me.imsergioh.pluginsapi.instance.menu.CoreMenu;
 import me.imsergioh.pluginsapi.instance.player.CorePlayer;
@@ -34,5 +36,8 @@ public class CorePlayerListeners implements Listener {
         CorePlayer corePlayer = CorePlayer.get(player);
         if (corePlayer == null) return;
         corePlayer.setCurrentMenuOpen(null);
+
+        // TODO: REMOVE THIS
+        PaperChatUtil.send(player, TestMessages.notValid_input);
     }
 }
