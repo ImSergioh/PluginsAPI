@@ -36,8 +36,5 @@ public class CorePlayerListeners implements Listener {
         CorePlayer corePlayer = CorePlayer.get(player);
         if (corePlayer == null) return;
         corePlayer.setCurrentMenuOpen(null);
-
-        // TODO: REMOVE THIS
-        PaperChatUtil.send(player, TestMessages.testMessageList);
     }
 }
