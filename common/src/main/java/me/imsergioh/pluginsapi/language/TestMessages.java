@@ -15,7 +15,16 @@ public enum TestMessages implements IMessageCategory {
             "Linea2",
             "no se",
             "33"})
-    testMessageList;
+    testMessageList,
+
+    @DefaultLanguageItem(
+            material = "BIRCH_PLANKS",
+            name = "&bTest Item LES GO",
+            description = {"&9Linea1",
+                    "Linea2",
+                    "&e&lLINEA 3"})
+    @ItemMeta(key = "skullTexture", value = "sdfpijfp`jasdfopidfsjdosiajfdowijfoipjaoipsfjiodasjoipfasiofjoijaopjoisdjfjpfodisajopfjadosf")
+    testItem;
 
 
 

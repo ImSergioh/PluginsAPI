@@ -1,6 +1,7 @@
 package me.imsergioh.pluginsapi.instance.item;
 
 import me.imsergioh.pluginsapi.instance.PlayerLanguages;
+import me.imsergioh.pluginsapi.language.IMessageCategory;
 import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
 import me.imsergioh.pluginsapi.util.ChatUtil;
@@ -8,6 +9,7 @@ import me.imsergioh.pluginsapi.util.LanguageUtil;
 import me.imsergioh.pluginsapi.util.PaperChatUtil;
 import me.imsergioh.pluginsapi.util.SkullCreator;
 import net.kyori.adventure.text.Component;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -155,4 +157,17 @@ public class ItemBuilder {
         }
         return list;
     }
+
+    public static ItemBuilder of(Language language, IMessageCategory category) {
+        Document document = category.getDocumentItem(language);
+        ItemBuilder itemBuilder = ItemBuilder.of(Material.valueOf(document.getString("material")));
+        itemBuilder.amount(document.get("amount", Number.class).intValue());
+
+        String name = document.getString("name");
+        if (name != null) itemBuilder.name(name);
+        List<String> description = document.getList("description", String.class);
+        if (description != null) itemBuilder.lore(description);
+        return itemBuilder;
+    }
+
 }
