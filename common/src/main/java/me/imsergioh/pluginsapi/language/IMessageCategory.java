@@ -21,17 +21,17 @@ public interface IMessageCategory {
 
     default List<String> getMessageListOf(Language language) {
         String holderName = getClass().getDeclaredAnnotation(LangMessagesInfo.class).name();
-        return LanguagesHandler.get(language).get(holderName).getList(getLanguageKeyByFieldName(getFieldName()), String.class);
+        return (List<String>) LanguagesHandler.get(language).get(holderName).get(getLanguageKeyByFieldName(getFieldName()));
     }
 
     default String getMessageOf(Language language) {
         String holderName = getClass().getDeclaredAnnotation(LangMessagesInfo.class).name();
-        return LanguagesHandler.get(language).get(holderName).getString(getLanguageKeyByFieldName(getFieldName()));
+        return (String) LanguagesHandler.get(language).get(holderName).get(getLanguageKeyByFieldName(getFieldName()));
     }
 
     default Document getDocumentOf(Language language) {
         String holderName = getClass().getDeclaredAnnotation(LangMessagesInfo.class).name();
-        return LanguagesHandler.get(language).get(holderName).get(getLanguageKeyByFieldName(getFieldName()), Document.class);
+        return (Document) LanguagesHandler.get(language).get(holderName).get(getLanguageKeyByFieldName(getFieldName()));
     }
 
     default Class<?> getClassType(Language language) {
