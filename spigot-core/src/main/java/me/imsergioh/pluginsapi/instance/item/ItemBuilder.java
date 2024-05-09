@@ -41,6 +41,11 @@ public class ItemBuilder {
         meta = item.getItemMeta();
     }
 
+    public ItemBuilder modelData(int modelData) {
+        meta.setCustomModelData(modelData);
+        return this;
+    }
+
     public ItemBuilder name(String name, Object... args) {
         this.name = name;
         this.nameArgs = args;
