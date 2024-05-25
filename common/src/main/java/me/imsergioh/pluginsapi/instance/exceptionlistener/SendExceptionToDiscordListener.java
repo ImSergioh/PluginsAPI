@@ -4,10 +4,7 @@ import me.imsergioh.pluginsapi.connection.RedisConnection;
 import me.imsergioh.pluginsapi.instance.builder.DiscordLogEmbedBuilder;
 import me.imsergioh.pluginsapi.instance.handler.ExceptionHandlerListener;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SendExceptionToDiscordListener implements ExceptionHandlerListener {
 
@@ -25,7 +22,7 @@ public class SendExceptionToDiscordListener implements ExceptionHandlerListener 
     }
 
     @Override
-    public void onException(Thread thread, Throwable e) {
+    public void onException(Timer t, Throwable e) {
         if (alreadySent.contains(e.getLocalizedMessage())) return;
         alreadySent.add(e.getMessage());
         DiscordLogEmbedBuilder builder = new DiscordLogEmbedBuilder();
@@ -33,7 +30,7 @@ public class SendExceptionToDiscordListener implements ExceptionHandlerListener 
         String consoleLog = "NEW ERROR HAS BEEN THROWED!\nMessage: " + e.getMessage() + "\nLocalized Message: " + e.getLocalizedMessage();
         if (isStackTracesEnabled()) consoleLog += "\nSTACK TRACE:" + stackTrace;
         System.out.println(consoleLog);
-        builder.title("New exception! (Thread: " + thread.getName() + ")")
+        builder.title("New exception!")
                 .addField("Message", e.getMessage())
                 .addField("Localized Message", e.getLocalizedMessage());
         for (String fieldName : additionalFields.keySet()) {

@@ -21,7 +21,6 @@ public abstract class ManagerRegistry<K, V> implements IManagerRegistry<V>, Plug
     }
 
     public void unregister(K key) {
-        if (!registry.containsKey(key)) return;
         onUnregister(registry.remove(key));
     }
 

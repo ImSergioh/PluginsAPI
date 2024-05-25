@@ -4,10 +4,11 @@ import me.imsergioh.pluginsapi.util.GlobalExceptionHandler;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Timer;
 
 public interface ExceptionHandlerListener {
 
-    void onException(Thread t, Throwable e);
+    void onException(Timer t, Throwable e);
 
     default String getStackTraceAsString(Throwable e) {
         StringWriter sw = new StringWriter();
