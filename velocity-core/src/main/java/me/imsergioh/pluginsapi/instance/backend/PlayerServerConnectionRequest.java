@@ -14,7 +14,6 @@ public class PlayerServerConnectionRequest {
     private final RegisteredServer server;
     private long startDate;
     private final long timeout;
-    private int attempts = 0;
     private final int attemptsCount;
 
     private final Timer timer = new Timer();
@@ -38,16 +37,6 @@ public class PlayerServerConnectionRequest {
         startDate = System.currentTimeMillis();
         Player player = handler.getPlayer();
         System.out.println("Attempting to connect " + player.getUsername() + " to " + server.getServerInfo().getName());
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (attempts >= attemptsCount) {
-                    System.out.println("Failed to connect " + player.getUsername() + " to " + server.getServerInfo().getName() + "! (Attempted " + attempts + " times)");
-                    timer.cancel();
-                }
-                handler.getPlayer().createConnectionRequest(server).connect();
-                attempts++;
-            }
-        }, 25, timeout);
+        handler.getPlayer().createConnectionRequest(server).connect();
     }
 }
