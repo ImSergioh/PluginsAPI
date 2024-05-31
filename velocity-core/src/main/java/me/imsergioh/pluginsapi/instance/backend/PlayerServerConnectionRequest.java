@@ -36,7 +36,12 @@ public class PlayerServerConnectionRequest {
     private void startConnection() {
         startDate = System.currentTimeMillis();
         Player player = handler.getPlayer();
-        System.out.println("Attempting to connect " + player.getUsername() + " to " + server.getServerInfo().getName());
-        handler.getPlayer().createConnectionRequest(server).connect();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("Attempting to connect " + player.getUsername() + " to " + server.getServerInfo().getName());
+                handler.getPlayer().createConnectionRequest(server).connect();
+            }
+        }, 25);
     }
 }
