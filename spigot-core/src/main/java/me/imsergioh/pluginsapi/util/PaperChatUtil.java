@@ -23,6 +23,18 @@ public class PaperChatUtil {
         player.sendMessage(parse(player, message, args));
     }
 
+    public static Component parse(Player player, IMessageCategory category, Object... args) {
+        Language language = PlayerLanguages.get(player.getUniqueId());
+        String message = category.getObjectOfToString(language);
+        return parse(player, message, args);
+    }
+
+    public static Component parse(IMessageCategory category, Object... args) {
+        Language language = Language.getDefault();
+        String message = category.getObjectOfToString(language);
+        return parse(message, args);
+    }
+
     public static Component parse(String message, Object... args) {
         message = ChatUtil.parse(message, args);
         MiniMessage miniMessage = MiniMessage.miniMessage();
