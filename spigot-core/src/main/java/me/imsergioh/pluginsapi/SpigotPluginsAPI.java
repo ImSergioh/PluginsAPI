@@ -25,7 +25,7 @@ public class SpigotPluginsAPI {
     private static JavaPlugin plugin;
     private static BukkitTask bukkitTask;
 
-    public static void setup(JavaPlugin pl) {
+    public static void  setup(JavaPlugin pl) {
         plugin = pl;
         ItemBuilder.setup(plugin);
         ItemActionsManager.registerDefaults();
@@ -39,7 +39,7 @@ public class SpigotPluginsAPI {
             System.out.println("Command 'language' not found! (Not registered)");
         }
 
-        EnumMessagesRegistry.registerLanguageHolder(TestMessages.class);
+        //EnumMessagesRegistry.registerLanguageHolder(TestMessages.class);
     }
 
     public static void startTickTask() {

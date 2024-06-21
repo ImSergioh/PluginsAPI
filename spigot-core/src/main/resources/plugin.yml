@@ -1,0 +1,4 @@
+name: SpigotCore
+main: me.imsergioh.pluginsapi.plugin.SpigotCorePlugin
+version: 1.0
+author: ImSergioh

@@ -36,15 +36,17 @@ public class ItemActionListeners implements Listener {
     public void actionInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack item = player.getItemInHand();
+        if (!CorePlayer.isCorePlayersActive()) return;
         // Execute actions with given properties
         CoreMenu coreMenu = CorePlayer.get(player).getCurrentMenuSet();
-        if (coreMenu == null || item == null || event.getAction().equals(Action.PHYSICAL)) return;
+        if (coreMenu == null || event.getAction().equals(Action.PHYSICAL)) return;
         action(player.getInventory().getHeldItemSlot(), item, player, event);
     }
 
     @EventHandler
     public void actionClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
+        if (!CorePlayer.isCorePlayersActive()) return;
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
 
@@ -54,6 +56,7 @@ public class ItemActionListeners implements Listener {
 
     private void action(int slot, ItemStack item, Player player, Event event) {
         if (item == null) return;
+        if (!CorePlayer.isCorePlayersActive()) return;
         ClickHandler handler = new ClickHandler(player, item, event);
         if (CorePlayer.get(player).getCurrentMenuOpen() != null) {
             CorePlayer.get(player).getCurrentMenuOpen().getActionManager().execute(slot, item, handler);

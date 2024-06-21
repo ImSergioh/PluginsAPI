@@ -24,6 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CorePlayer extends OfflineCorePlayer<Player> {
 
+    @Getter
+    private static boolean corePlayersActive;
+
     @Setter
     @Getter
     private static boolean enabledTickEvent = false;
@@ -50,6 +53,7 @@ public class CorePlayer extends OfflineCorePlayer<Player> {
 
     public CorePlayer(UUID uuid) {
         super(uuid);
+        corePlayersActive = true;
         this.uuid = uuid;
         players.put(uuid, this);
 

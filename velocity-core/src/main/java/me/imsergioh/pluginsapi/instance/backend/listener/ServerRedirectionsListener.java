@@ -7,8 +7,6 @@ import me.imsergioh.pluginsapi.instance.backend.request.ServerRedirectionRequest
 import me.imsergioh.pluginsapi.instance.handler.RedisPubSubListener;
 import me.imsergioh.pluginsapi.manager.VelocityPluginsAPI;
 import me.imsergioh.pluginsapi.util.VelocityChatUtil;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.*;
 

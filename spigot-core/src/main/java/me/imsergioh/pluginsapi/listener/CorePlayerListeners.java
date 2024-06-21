@@ -19,6 +19,7 @@ public class CorePlayerListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void registerInventoryCloseInv(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
+        if (!CorePlayer.isCorePlayersActive()) return;
         Player player = (Player) event.getPlayer();
         CorePlayer corePlayer = CorePlayer.get(player);
         if (corePlayer == null) return;
@@ -30,6 +31,7 @@ public class CorePlayerListeners implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
+        if (!CorePlayer.isCorePlayersActive()) return;
         Player player = (Player) event.getPlayer();
         CorePlayer corePlayer = CorePlayer.get(player);
         if (corePlayer == null) return;
