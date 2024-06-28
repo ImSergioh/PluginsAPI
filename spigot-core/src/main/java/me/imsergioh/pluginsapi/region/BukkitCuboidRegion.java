@@ -5,6 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 
 public class BukkitCuboidRegion extends CuboidRegion implements IBukkitCuboidRegion {
 
@@ -38,5 +42,13 @@ public class BukkitCuboidRegion extends CuboidRegion implements IBukkitCuboidReg
     public boolean isInsideLocation(Location location) {
         if (!location.getWorld().getName().equals(getWorldName())) return false;
         return isInside(IBukkitCuboidRegion.toVector3d(location));
+    }
+
+    public Iterator<Location> getBukkitLocationsList() {
+        Set<Location> locations = new HashSet<>();
+        getLocationsList().forEachRemaining(v -> {
+            locations.add(IBukkitCuboidRegion.toBukkitLocation(getWorld(), v));
+        });
+        return locations.iterator();
     }
 }

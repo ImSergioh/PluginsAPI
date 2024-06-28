@@ -1,11 +1,12 @@
 package me.imsergioh.pluginsapi.region;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.joml.Vector3d;
+
+import java.util.Iterator;
 
 public interface IBukkitCuboidRegion extends ICuboidRegion {
 
@@ -29,4 +30,6 @@ public interface IBukkitCuboidRegion extends ICuboidRegion {
     static Location toBukkitLocation(World world, Vector3d vector3d) {
         return new Location(world, vector3d.x, vector3d.y, vector3d.z);
     }
+
+    Iterator<Location> getBukkitLocationsList();
 }
