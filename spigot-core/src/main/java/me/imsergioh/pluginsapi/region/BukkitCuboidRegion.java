@@ -1,3 +1,4 @@
+
 package me.imsergioh.pluginsapi.region;
 
 import lombok.Getter;
@@ -20,6 +21,10 @@ public class BukkitCuboidRegion extends CuboidRegion implements IBukkitCuboidReg
     public BukkitCuboidRegion(String worldName, Location point1, Location point2) {
         super(IBukkitCuboidRegion.toVector3d(point1), IBukkitCuboidRegion.toVector3d(point2));
         this.worldName = worldName;
+    }
+
+    public Location getBukkitCenter() {
+        return IBukkitCuboidRegion.toBukkitLocation(getWorld(), getCenter());
     }
 
     @Override
