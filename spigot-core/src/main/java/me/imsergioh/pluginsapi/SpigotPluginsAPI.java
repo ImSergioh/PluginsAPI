@@ -1,6 +1,8 @@
 package me.imsergioh.pluginsapi;
 
 import lombok.Getter;
+import me.imsergioh.pluginsapi.handler.VariablesHandler;
+import me.imsergioh.pluginsapi.instance.TextComponentParser;
 import me.imsergioh.pluginsapi.instance.player.CorePlayer;
 import me.imsergioh.pluginsapi.language.EnumMessagesRegistry;
 import me.imsergioh.pluginsapi.language.TestMessages;
@@ -8,6 +10,9 @@ import me.imsergioh.pluginsapi.manager.ItemActionsManager;
 import me.imsergioh.pluginsapi.command.LanguageCommand;
 import me.imsergioh.pluginsapi.instance.item.ItemBuilder;
 import me.imsergioh.pluginsapi.listener.CorePlayerListeners;
+import me.imsergioh.pluginsapi.variables.EasyGradientVariable;
+import me.imsergioh.pluginsapi.variables.HyperLinkVariable;
+import me.imsergioh.pluginsapi.variables.MiniMessageHexVariable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
@@ -38,8 +43,12 @@ public class SpigotPluginsAPI {
         } else {
             System.out.println("Command 'language' not found! (Not registered)");
         }
+        VariablesHandler.register(new EasyGradientVariable());
+        VariablesHandler.register(new MiniMessageHexVariable());
+        VariablesHandler.register(new HyperLinkVariable());
 
-        //EnumMessagesRegistry.registerLanguageHolder(TestMessages.class);
+
+        VariablesHandler.registerParser(new TextComponentParser());
     }
 
     public static void startTickTask() {
@@ -80,10 +89,6 @@ public class SpigotPluginsAPI {
             }
 
         }
-    }
-
-    public static JavaPlugin getPlugin() {
-        return plugin;
     }
 
     private static String getVersion() {
