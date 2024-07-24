@@ -2,16 +2,12 @@ package me.imsergioh.pluginsapi;
 
 import lombok.Getter;
 import me.imsergioh.pluginsapi.handler.VariablesHandler;
-import me.imsergioh.pluginsapi.instance.TextComponentParser;
 import me.imsergioh.pluginsapi.instance.player.CorePlayer;
-import me.imsergioh.pluginsapi.language.EnumMessagesRegistry;
-import me.imsergioh.pluginsapi.language.TestMessages;
 import me.imsergioh.pluginsapi.manager.ItemActionsManager;
 import me.imsergioh.pluginsapi.command.LanguageCommand;
 import me.imsergioh.pluginsapi.instance.item.ItemBuilder;
 import me.imsergioh.pluginsapi.listener.CorePlayerListeners;
 import me.imsergioh.pluginsapi.variables.EasyGradientVariable;
-import me.imsergioh.pluginsapi.variables.HyperLinkVariable;
 import me.imsergioh.pluginsapi.variables.MiniMessageHexVariable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -45,10 +41,7 @@ public class SpigotPluginsAPI {
         }
         VariablesHandler.register(new EasyGradientVariable());
         VariablesHandler.register(new MiniMessageHexVariable());
-        VariablesHandler.register(new HyperLinkVariable());
 
-
-        VariablesHandler.registerParser(new TextComponentParser());
     }
 
     public static void startTickTask() {

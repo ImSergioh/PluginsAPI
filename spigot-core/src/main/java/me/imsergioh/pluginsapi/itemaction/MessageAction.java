@@ -3,7 +3,6 @@ package me.imsergioh.pluginsapi.itemaction;
 import me.imsergioh.pluginsapi.instance.ItemActionExecutor;
 import me.imsergioh.pluginsapi.instance.item.ClickHandler;
 import me.imsergioh.pluginsapi.util.ChatUtil;
-import me.imsergioh.pluginsapi.util.PaperChatUtil;
 import org.bukkit.entity.Player;
 
 public class MessageAction implements ItemActionExecutor {
@@ -17,6 +16,6 @@ public class MessageAction implements ItemActionExecutor {
             messageBuilder.append(word).append(" ");
         }
         messageBuilder.deleteCharAt(messageBuilder.length() - 1);
-        player.sendMessage(PaperChatUtil.parse(player, messageBuilder.toString()));
+        player.sendMessage(ChatUtil.parse(player, messageBuilder.toString()));
     }
 }

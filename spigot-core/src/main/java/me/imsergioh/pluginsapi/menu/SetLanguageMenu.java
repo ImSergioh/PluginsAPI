@@ -36,7 +36,7 @@ public class SetLanguageMenu extends CoreMenu {
     public static ItemBuilder getLangItem(Player player, Language language) {
         String name = LanguageMessages.get().get(player, PlayerLanguages.get(player.getUniqueId()), "lang." + language.name() + ".name");
         String skullTexture = skullTextures.get(language);
-        ItemBuilder builder = ItemBuilder.of(Material.PLAYER_HEAD)
+        ItemBuilder builder = ItemBuilder.of(Material.SKULL_ITEM).data(3)
                 .data(3)
                 .name(name);
         if (skullTexture != null) builder.skullTexture(skullTexture);

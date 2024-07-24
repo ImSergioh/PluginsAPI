@@ -32,8 +32,8 @@ public class MenuItemActionManager {
         StringBuilder b = new StringBuilder(item.getType().name() + item.getAmount());
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            if (meta.displayName() != null) b.append(meta.displayName());
-            if (meta.lore() != null) b.append(meta.lore());
+            if (meta.getDisplayName() != null) b.append(meta.getDisplayName());
+            if (meta.getLore() != null) b.append(meta.getLore());
         }
         return b.toString();
     }

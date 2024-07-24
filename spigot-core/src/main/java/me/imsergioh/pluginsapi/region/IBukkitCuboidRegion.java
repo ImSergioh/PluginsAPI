@@ -24,7 +24,7 @@ public interface IBukkitCuboidRegion extends ICuboidRegion {
     World getWorld();
 
     static Vector3d toVector3d(Location location) {
-        return new Vector3d(location.x(), location.y(), location.z());
+        return new Vector3d(location.getX(), location.getY(), location.getZ());
     }
 
     static Location toBukkitLocation(World world, Vector3d vector3d) {

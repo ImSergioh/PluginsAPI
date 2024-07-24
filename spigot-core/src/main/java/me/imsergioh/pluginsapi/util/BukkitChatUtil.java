@@ -3,54 +3,45 @@ package me.imsergioh.pluginsapi.util;
 import me.imsergioh.pluginsapi.instance.PlayerLanguages;
 import me.imsergioh.pluginsapi.language.IMessageCategory;
 import me.imsergioh.pluginsapi.language.Language;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PaperChatUtil {
+public class BukkitChatUtil {
 
     private static final Pattern legacyHexPattern = Pattern.compile("§[0-9a-fA-F]");
 
     public static void send(Player player, IMessageCategory category, Object... args) {
         Language language = PlayerLanguages.get(player.getUniqueId());
         String message = category.getObjectOfToString(language);
-        player.sendMessage(parse(player, message, args));
+        player.sendMessage(parse(player, message, args).toLegacyText());
     }
 
-    public static Component parse(Player player, IMessageCategory category, Object... args) {
+    public static TextComponent parse(Player player, IMessageCategory category, Object... args) {
         Language language = PlayerLanguages.get(player.getUniqueId());
         String message = category.getObjectOfToString(language);
         return parse(player, message, args);
     }
 
-    public static Component parse(IMessageCategory category, Object... args) {
+    public static TextComponent parse(IMessageCategory category, Object... args) {
         Language language = Language.getDefault();
         String message = category.getObjectOfToString(language);
         return parse(message, args);
     }
 
-    public static Component parse(String message, Object... args) {
-        message = ChatUtil.parse(message, args);
-        MiniMessage miniMessage = MiniMessage.miniMessage();
+    public static TextComponent parse(String message, Object... args) {
         message = translate(message);
         message = parseLegacyToMiniMessageHex(message);
-        return miniMessage.deserialize(message)
-                .decoration(TextDecoration.ITALIC, false);
+        return new TextComponent(ChatUtil.parse(message, args));
     }
 
-    public static Component parse(Player player, String message, Object... args) {
-        message = ChatUtil.parse(player, message, args);
-        MiniMessage miniMessage = MiniMessage.miniMessage();
+    public static TextComponent parse(Player player, String message, Object... args) {
         message = translate(message);
         message = parseLegacyToMiniMessageHex(message);
-        return miniMessage.deserialize(message)
-                .decoration(TextDecoration.ITALIC, false);
+        return new TextComponent(ChatUtil.parse(player, message, args));
     }
 
     public static String translate(String text) {

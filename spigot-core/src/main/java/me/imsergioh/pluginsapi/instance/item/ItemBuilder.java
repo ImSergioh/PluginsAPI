@@ -6,9 +6,7 @@ import me.imsergioh.pluginsapi.language.Language;
 import me.imsergioh.pluginsapi.listener.ItemActionListeners;
 import me.imsergioh.pluginsapi.util.ChatUtil;
 import me.imsergioh.pluginsapi.util.LanguageUtil;
-import me.imsergioh.pluginsapi.util.PaperChatUtil;
 import me.imsergioh.pluginsapi.util.SkullCreator;
-import net.kyori.adventure.text.Component;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -39,11 +37,6 @@ public class ItemBuilder {
     protected ItemBuilder(Material material) {
         item = new ItemStack(material, 1);
         meta = item.getItemMeta();
-    }
-
-    public ItemBuilder modelData(int modelData) {
-        meta.setCustomModelData(modelData);
-        return this;
     }
 
     public ItemBuilder name(String name, Object... args) {
@@ -100,10 +93,10 @@ public class ItemBuilder {
 
     public ItemStack get(Language language) {
         if (name != null)
-            meta.displayName(PaperChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
+            meta.setDisplayName(ChatUtil.parse(LanguageUtil.parse(language, name), nameArgs));
         if (lore != null && !lore.isEmpty()) {
             lore.replaceAll(line -> ChatUtil.parse(LanguageUtil.parse(language, line)));
-            meta.lore(modernLore(lore, null));
+            meta.setLore(modernLore(lore, null));
         }
         item.setItemMeta(meta);
         return item;
@@ -111,11 +104,11 @@ public class ItemBuilder {
 
     public ItemStack get() {
         if (name != null)
-            meta.displayName(PaperChatUtil.parse(name, nameArgs));
+            meta.setDisplayName(ChatUtil.parse(name, nameArgs));
 
         if (!lore.isEmpty()) {
             lore.replaceAll(ChatUtil::parse);
-            meta.lore(modernLore(lore, null));
+            meta.setLore(modernLore(lore, null));
         }
         item.setItemMeta(meta);
         return item;
@@ -123,11 +116,11 @@ public class ItemBuilder {
 
     public ItemStack get(Player player) {
         if (name != null)
-            meta.displayName(PaperChatUtil.parse(player, name, nameArgs));
+            meta.setDisplayName(ChatUtil.parse(player, name, nameArgs));
 
         if (!lore.isEmpty()) {
             lore.replaceAll(line -> LanguageUtil.parse(PlayerLanguages.get(player.getUniqueId()), line));
-            meta.lore(modernLore(lore, player));
+            meta.setLore(modernLore(lore, player));
         }
 
         item.setItemMeta(meta);
@@ -146,17 +139,17 @@ public class ItemBuilder {
         Bukkit.getPluginManager().registerEvents(new ItemActionListeners(), plugin);
     }
 
-    public List<Component> modernLore(List<String> initialLore, Player player) {
-        List<Component> list = new ArrayList<>();
+    public List<String> modernLore(List<String> initialLore, Player player) {
+        List<String> list = new ArrayList<>();
         for (String line : initialLore) {
             if (line.contains("\n")) {
                 String[] lines = line.split("\n");
                 for (String subLine : lines) {
-                    Component formatted = player == null ? PaperChatUtil.parse(subLine, loreArgs) : PaperChatUtil.parse(player, subLine, loreArgs);
+                    String formatted = player == null ? ChatUtil.parse(subLine, loreArgs) : ChatUtil.parse(player, subLine, loreArgs);
                     list.add(formatted);
                 }
             } else {
-                Component formatted = player == null ? PaperChatUtil.parse(line, loreArgs) : PaperChatUtil.parse(player, line, loreArgs);
+                String formatted = player == null ? ChatUtil.parse(line, loreArgs) : ChatUtil.parse(player, line, loreArgs);
                 list.add(formatted);
             }
         }

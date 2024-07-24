@@ -123,7 +123,7 @@ public class SkullCreator {
         notNull(id, "id");
 
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(Bukkit.getOfflinePlayer(id));
+        meta.setOwner(Bukkit.getOfflinePlayer(id).getName());
         item.setItemMeta(meta);
 
         return item;
@@ -177,7 +177,7 @@ public class SkullCreator {
         notNull(name, "name");
 
         Skull state = (Skull) block.getState();
-        state.setOwningPlayer(Bukkit.getOfflinePlayer(name));
+        state.setOwner(name);
         state.update(false, false);
     }
 
@@ -193,7 +193,7 @@ public class SkullCreator {
 
         setToSkull(block);
         Skull state = (Skull) block.getState();
-        state.setOwningPlayer(Bukkit.getOfflinePlayer(id));
+        state.setOwner(Bukkit.getOfflinePlayer(id).getName());
         state.update(false, false);
     }
 
