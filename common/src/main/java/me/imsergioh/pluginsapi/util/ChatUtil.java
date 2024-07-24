@@ -43,22 +43,25 @@ public class ChatUtil {
     public static <Player> String parse(Player player, String message) {
         if (player != null && message != null) {
             message = VariablesHandler.parse(player, message);
+            message = color(message);
         }
         return parse(message);
     }
 
     public static <Player> String parse(Player player, String message, Object... args) {
         message = parse(player, message);
+        message = color(message);
         try {
             return MessageFormat.format(message, args);
         } catch (Exception e) {
-            return message;
+            return color(message);
         }
     }
 
     public static String parse(String message, Object... args) {
         message = parse(message);
-        return MessageFormat.format(message, args);
+        message = color(message);
+        return color(MessageFormat.format(message, args));
     }
 
     public static String parse(String message) {
@@ -69,58 +72,8 @@ public class ChatUtil {
         return null;
     }
 
-    public static String color(String oldMessage) {
-        StringBuilder miniMessage = new StringBuilder();
-
-        boolean underline = false; // Variable para controlar si estamos dentro de una sección subrayada
-        boolean obfuscated = false; // Variable para controlar si estamos dentro de una sección obfuscated
-
-        int index = 0;
-        while (index < oldMessage.length()) {
-            char currentChar = oldMessage.charAt(index);
-            if (currentChar == '&') {
-                if (index + 1 < oldMessage.length()) {
-                    String code = String.valueOf(currentChar) + oldMessage.charAt(index + 1);
-                    if (modernColorMap.containsKey(code)) {
-                        if (code.equals("&n")) {
-                            // Si encontramos el código para subrayado, cambiamos el estado de la variable
-                            underline = !underline;
-                            if (underline) {
-                                miniMessage.append("<u>");
-                            } else {
-                                miniMessage.append("</u>");
-                            }
-                        } else if (code.equals("&k")) {
-                            // Si encontramos el código para obfuscated, cambiamos el estado de la variable
-                            obfuscated = !obfuscated;
-                            if (obfuscated) {
-                                miniMessage.append("<obfuscated>");
-                            } else {
-                                miniMessage.append("</obfuscated>");
-                            }
-                        } else {
-                            // Si es un código de color, lo aplicamos normalmente
-                            miniMessage.append("<").append(modernColorMap.get(code)).append(">");
-                        }
-                        index++;
-                    }
-                }
-            } else {
-                miniMessage.append(currentChar);
-            }
-            index++;
-        }
-
-        // Si terminamos dentro de una sección subrayada, la cerramos
-        if (underline) {
-            miniMessage.append("</u>");
-        }
-
-        // Si terminamos dentro de una sección obfuscated, la cerramos
-        if (obfuscated) {
-            miniMessage.append("</obfuscated>");
-        }
-        return miniMessage.toString();
+    public static String color(String msg) {
+        return msg.replace("&", "§");
     }
 
 
