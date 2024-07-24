@@ -1,12 +1,12 @@
 package me.imsergioh.pluginsapi.instance.backend.listener;
 
-import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
 import me.imsergioh.pluginsapi.handler.PubSubConnectionHandler;
 import me.imsergioh.pluginsapi.instance.backend.request.ServerRedirectionRequest;
 import me.imsergioh.pluginsapi.instance.handler.RedisPubSubListener;
-import me.imsergioh.pluginsapi.manager.VelocityPluginsAPI;
-import me.imsergioh.pluginsapi.util.VelocityChatUtil;
+import me.imsergioh.pluginsapi.manager.BungeeCordPluginsAPI;
+import me.imsergioh.pluginsapi.util.ChatUtil;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.*;
 
@@ -24,23 +24,23 @@ public class ServerRedirectionsListener extends RedisPubSubListener {
     public void onMessage(String message) {
         ServerRedirectionRequest request = ServerRedirectionRequest.parse(message);
         if (request == null) return;
-        Optional<Player> optional = VelocityPluginsAPI.proxy.getPlayer(request.getId());
-        if (optional.isEmpty()) return;
-        Player player = optional.get();
+        ProxiedPlayer player = BungeeCordPluginsAPI.proxy.getPlayer(request.getId());
+        if (player == null || !player.isConnected()) return;
         String serverPrefix = request.getServerPrefix();
 
-        List<RegisteredServer> list = new ArrayList<>();
-        for (RegisteredServer server : VelocityPluginsAPI.proxy.getAllServers()) {
-            if (!server.getServerInfo().getName().startsWith(serverPrefix)) continue;
-            list.add(server);
+        List<ServerInfo> list = new ArrayList<>();
+        for (ServerInfo serverInfo : BungeeCordPluginsAPI.proxy.getServers().values()) {
+            String serverName = serverInfo.getName();
+            if (!serverName.startsWith(serverPrefix)) continue;
+            list.add(serverInfo);
         }
         if (list.isEmpty()) {
-            player.sendMessage(VelocityChatUtil.parse("<red>We didn't found servers to connect to!"));
+            player.sendMessage(ChatUtil.parse("<red>We didn't found servers to connect to!"));
             return;
         }
 
         // Random selection of server by list:
-        RegisteredServer target = list.get(new Random().nextInt(list.size()));
-        player.createConnectionRequest(target).fireAndForget();
+        ServerInfo target = list.get(new Random().nextInt(list.size()));
+        player.connect(target);
     }
 }

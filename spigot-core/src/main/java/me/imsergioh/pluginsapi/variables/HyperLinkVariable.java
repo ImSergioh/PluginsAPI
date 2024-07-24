@@ -20,8 +20,10 @@ public class HyperLinkVariable implements IObjectVariableListener<TextComponent,
         TextComponent.Builder textComponentBuilder = Component.text();
 
         int lastEnd = 0;
+        boolean found = false;
 
         while (matcher.find()) {
+            found = true;
             // Añadir el texto entre los enlaces
             if (matcher.start() > lastEnd) {
                 textComponentBuilder.append(Component.text(message.substring(lastEnd, matcher.start())));
@@ -39,11 +41,15 @@ public class HyperLinkVariable implements IObjectVariableListener<TextComponent,
             lastEnd = matcher.end();
         }
 
+        // Si no se encontraron enlaces, retornar null
+        if (!found) {
+            return null;
+        }
+
         // Añadir cualquier texto restante después del último enlace
         if (lastEnd < message.length()) {
             textComponentBuilder.append(Component.text(message.substring(lastEnd)));
         }
-
         return textComponentBuilder.build();
     }
 
